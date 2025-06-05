@@ -80,17 +80,6 @@ function App() {
 return (
     <div style={{ fontFamily: 'DM Sans, sans-serif', background: '#1e1b18', color: '#f4f1ee', minHeight: '100vh', padding: '2rem' }}><Toaster position="top-right" toastOptions={toastOptions} />
       <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Fort NOC</h1>
-      <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-        
-<button
-          onClick={refreshData}
-          style={{ background: '#4e7267', color: '#f4f1ee', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px' }}
-        >
-          Refresh Data
-        </button>
-        <span style={{ alignSelf: 'center', fontSize: '0.9rem' }}>Last Refreshed: {lastRefresh}</span>
-      </div>
-
       <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
         <div style={{
       display: 'flex',
@@ -125,6 +114,17 @@ return (
         Contact Search
       </div>
     </div>
+      </div>
+
+      <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+
+<button
+          onClick={refreshData}
+          style={{ background: '#4e7267', color: '#f4f1ee', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px' }}
+        >
+          Refresh Data
+        </button>
+        <span style={{ alignSelf: 'center', fontSize: '0.9rem' }}>Last Refreshed: {lastRefresh}</span>
       </div>
 
       {tab === 'email' ? (
