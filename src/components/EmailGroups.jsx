@@ -118,6 +118,9 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
             }}
           >
             {group.name}
+            <span style={{ marginLeft: '0.25rem', fontSize: '0.8rem', color: '#c8bfb7' }}>
+              ({group.emails.length})
+            </span>
           </button>
         ))}
         {(selectedGroups.length > 0 || adhocEmails.length > 0) && (
