@@ -12,15 +12,15 @@ function App() {
   const [tab, setTab] = useState(() => localStorage.getItem('activeTab') || 'email')
 
   useEffect(() => {
-    const { emailData, contactData } = window.fortnocAPI.loadExcelData()
+    const { emailData, contactData } = window.nocListAPI.loadExcelData()
     setEmailData(emailData)
     setContactData(contactData)
     setLastRefresh(new Date().toLocaleString())
   }, [])
 
   useEffect(() => {
-    if (window.fortnocAPI?.onExcelDataUpdate) {
-      window.fortnocAPI.onExcelDataUpdate((data) => {
+    if (window.nocListAPI?.onExcelDataUpdate) {
+      window.nocListAPI.onExcelDataUpdate((data) => {
         toast.success('Excel files updated automatically!')
         setEmailData(data.emailData || [])
         setContactData(data.contactData || [])
@@ -30,7 +30,7 @@ function App() {
   }, [])
 
   const refreshData = () => {
-    const { emailData, contactData } = window.fortnocAPI.loadExcelData()
+    const { emailData, contactData } = window.nocListAPI.loadExcelData()
     setEmailData(emailData)
     setContactData(contactData)
     setLastRefresh(new Date().toLocaleString())
@@ -79,7 +79,7 @@ function App() {
 
 return (
     <div style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '2rem' }}><Toaster position="top-right" toastOptions={toastOptions} />
-      <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Fort NOC</h1>
+      <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>NOC List</h1>
       <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
         <div style={{
       display: 'flex',

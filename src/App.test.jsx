@@ -5,11 +5,11 @@ import App from './App'
 
 describe('App', () => {
   it('renders heading', () => {
-    window.fortnocAPI = {
+    window.nocListAPI = {
       loadExcelData: () => ({ emailData: [], contactData: [] }),
       onExcelDataUpdate: () => {},
     }
     render(<App />)
-    expect(screen.getByText(/Fort NOC/i)).toBeInTheDocument()
+    expect(screen.getByText(/NOC List/i)).toBeInTheDocument()
   })
 })

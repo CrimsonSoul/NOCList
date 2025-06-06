@@ -41,7 +41,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
           </button>
         )}
         <button
-          onClick={() => window.fortnocAPI?.openFile?.('contacts.xlsx')}
+          onClick={() => window.nocListAPI?.openFile?.('contacts.xlsx')}
           className="btn btn-secondary"
           style={{ borderRadius: '6px' }}
         >
