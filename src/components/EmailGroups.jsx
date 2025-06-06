@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups, setAdhocEmails }) => {
-  const [mergedEmails, setMergedEmails] = useState([])
   const [copied, setCopied] = useState(false)
   const [search, setSearch] = useState('')
 
@@ -21,13 +20,12 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
     )
   }, [groups, search])
 
-  useEffect(() => {
+  const mergedEmails = useMemo(() => {
     const all = selectedGroups.flatMap(name => {
       const group = groups.find(g => g.name === name)
       return group ? group.emails : []
     })
-    const combined = [...new Set([...all, ...adhocEmails])]
-    setMergedEmails(combined)
+    return [...new Set([...all, ...adhocEmails])]
   }, [selectedGroups, groups, adhocEmails])
 
   const toggleSelect = name => {
