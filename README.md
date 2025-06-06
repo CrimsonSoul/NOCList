@@ -40,3 +40,8 @@ The generated `dist/NOCList-win32-x64` folder will contain `NOCList.exe`. Place
 `groups.xlsx` and `contacts.xlsx` next to the executable so the application can
 load them at runtime.
 
+## Continuous Integration
+
+A GitHub Actions workflow builds the Windows package on each push to `main`.
+The resulting `NOCList-win32-x64` folder is uploaded as a workflow artifact.
+
