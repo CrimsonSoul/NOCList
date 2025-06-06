@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 
 const formatPhones = (value) => {
   if (value === undefined || value === null) return ''
@@ -19,17 +19,15 @@ const formatPhones = (value) => {
 
 const ContactSearch = ({ contactData, addAdhocEmail }) => {
   const [query, setQuery] = useState('')
-  const [filtered, setFiltered] = useState(contactData || [])
-
-  useEffect(() => {
-    setFiltered(
+  const filtered = useMemo(
+    () =>
       contactData.filter(c =>
         Object.values(c).some(val =>
           String(val).toLowerCase().includes(query.toLowerCase())
         )
-      )
-    )
-  }, [query, contactData])
+      ),
+    [query, contactData]
+  )
 
   return (
     <div>
