@@ -8,7 +8,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
     setFiltered(
       contactData.filter(c =>
         Object.values(c).some(val =>
-          val.toLowerCase().includes(query.toLowerCase())
+          String(val).toLowerCase().includes(query.toLowerCase())
         )
       )
     )
