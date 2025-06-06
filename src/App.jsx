@@ -10,12 +10,21 @@ function App() {
   const [contactData, setContactData] = useState([])
   const [lastRefresh, setLastRefresh] = useState('N/A')
   const [tab, setTab] = useState(() => localStorage.getItem('activeTab') || 'email')
+  const [logoAvailable, setLogoAvailable] = useState(false)
 
   useEffect(() => {
     const { emailData, contactData } = window.nocListAPI.loadExcelData()
     setEmailData(emailData)
     setContactData(contactData)
     setLastRefresh(new Date().toLocaleString())
+  }, [])
+
+  useEffect(() => {
+    fetch('logo.png', { method: 'HEAD' })
+      .then((res) => {
+        if (res.ok) setLogoAvailable(true)
+      })
+      .catch(() => {})
   }, [])
 
   useEffect(() => {
@@ -79,20 +88,24 @@ function App() {
     },
   };
 
-return (
+  return (
     <div className="fade-in" style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '2rem' }}><Toaster position="top-right" toastOptions={toastOptions} />
-      <pre style={{
-        fontFamily: 'monospace',
-        fontSize: '1rem',
-        marginBottom: '1rem',
-        lineHeight: '1.2',
-      }}>
-        {`    _   ______  ______   __    _      __
+      {logoAvailable ? (
+        <img src="logo.png" alt="NOC List Logo" style={{ width: '200px', marginBottom: '1rem' }} />
+      ) : (
+        <pre style={{
+          fontFamily: 'monospace',
+          fontSize: '1rem',
+          marginBottom: '1rem',
+          lineHeight: '1.2',
+        }}>
+          {`    _   ______  ______   __    _      __
    / | / / __ \/ ____/  / /   (_)____/ /_
   /  |/ / / / / /      / /   / / ___/ __/
  / /|  / /_/ / /___   / /___/ (__  ) /_
 /_/ |_|\____/\____/  /_____/_/____/\__/`}
-      </pre>
+        </pre>
+      )}
       <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
       <div
         className="stack-on-small"
