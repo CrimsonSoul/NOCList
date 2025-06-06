@@ -67,7 +67,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       </div>
 
       <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
-        <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
+        <div style={{ position: 'relative', flex: 1, minWidth: 0 }}>
           <input
             type="text"
             placeholder="Search groups..."
@@ -79,17 +79,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
           {search && (
             <button
               onClick={() => setSearch('')}
-              style={{
-                background: 'transparent',
-                color: '#aaa',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                position: 'absolute',
-                right: '0.25rem',
-                top: '50%',
-                transform: 'translateY(-50%)'
-              }}
+              className="clear-btn"
               title="Clear search"
             >
               ✕
