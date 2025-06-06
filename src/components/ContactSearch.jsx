@@ -33,6 +33,15 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
 
   return (
     <div>
+      <div style={{ marginBottom: '1rem' }}>
+        <button
+          onClick={() => window.nocListAPI?.openFile?.('contacts.xlsx')}
+          className="btn btn-secondary open-contact-btn"
+          style={{ borderRadius: '6px' }}
+        >
+          Open Contact List Excel
+        </button>
+      </div>
       <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1rem', gap: '0.5rem' }}>
         <div style={{ position: 'relative', flex: '1 1 250px', minWidth: 0, maxWidth: '300px' }}>
           <input
@@ -40,8 +49,8 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
             placeholder="Search contacts..."
             value={query}
             onChange={e => setQuery(e.target.value)}
-              className="input"
-              style={{ width: '100%', paddingRight: '2rem', borderRadius: '6px' }}
+            className="input"
+            style={{ width: '100%', paddingRight: '2rem', borderRadius: '6px' }}
           />
           {query && (
             <button
@@ -53,13 +62,6 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
             </button>
           )}
         </div>
-          <button
-            onClick={() => window.nocListAPI?.openFile?.('contacts.xlsx')}
-            className="btn btn-secondary open-contact-btn"
-            style={{ borderRadius: '6px' }}
-          >
-          Open Contact List Excel
-        </button>
       </div>
 
       {filtered.length > 0 ? (
