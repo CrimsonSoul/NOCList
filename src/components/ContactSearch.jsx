@@ -50,7 +50,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
             value={query}
             onChange={e => setQuery(e.target.value)}
             className="input"
-            style={{ width: '100%', paddingRight: '2rem', borderRadius: '6px' }}
+            style={{ width: '100%', paddingRight: '2.25rem', borderRadius: '6px' }}
           />
           {query && (
             <button
@@ -68,7 +68,8 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 300px))',
+            justifyContent: 'start',
             gap: '1rem'
           }}
         >
