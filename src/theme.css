@@ -42,6 +42,31 @@ body {
   color: var(--text-light);
 }
 
+/* Contact cards */
+.contact-card {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 6px;
+  color: var(--text-light);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  animation: fade-in 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  background: #3a2f28;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Utility class to stack flex children on narrow screens */
 .stack-on-small {
   display: flex;
