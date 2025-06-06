@@ -10,6 +10,8 @@ describe('App', () => {
       onExcelDataUpdate: () => {},
     }
     render(<App />)
-    expect(screen.getByText(/NOC List/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/_\s+______\s+______\s+__\s+_/)
+    ).toBeInTheDocument()
   })
 })

@@ -79,7 +79,18 @@ function App() {
 
 return (
     <div style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '2rem' }}><Toaster position="top-right" toastOptions={toastOptions} />
-      <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>NOC List</h1>
+      <pre style={{
+        fontFamily: 'monospace',
+        fontSize: '1rem',
+        marginBottom: '1rem',
+        lineHeight: '1.2',
+      }}>
+        {`    _   ______  ______   __    _      __
+   / | / / __ \/ ____/  / /   (_)____/ /_
+  /  |/ / / / / /      / /   / / ___/ __/
+ / /|  / /_/ / /___   / /___/ (__  ) /_
+/_/ |_|\____/\____/  /_____/_/____/\__/`}
+      </pre>
       <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
         <div style={{
       display: 'flex',
