@@ -22,15 +22,8 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
           placeholder="Search contacts..."
           value={query}
           onChange={e => setQuery(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            width: '100%',
-            maxWidth: '300px',
-            borderRadius: '6px',
-            border: '1px solid #444',
-            backgroundColor: '#222',
-            color: '#f4f1ee'
-          }}
+          className="input"
+          style={{ width: '100%', maxWidth: '300px', borderRadius: '6px' }}
         />
         {query && (
           <button
@@ -49,13 +42,8 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
         )}
         <button
           onClick={() => window.fortnocAPI?.openFile?.('contacts.xlsx')}
-          style={{
-            padding: '0.5rem 1rem',
-            background: '#5e3b2c',
-            color: '#f4f1ee',
-            border: 'none',
-            borderRadius: '6px'
-          }}
+          className="btn btn-secondary"
+          style={{ borderRadius: '6px' }}
         >
           Open Contact List Excel
         </button>
@@ -64,22 +52,15 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
       {filtered.length > 0 ? (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
           {filtered.map((contact, i) => (
-            <div key={i} style={{ background: '#3a312d', padding: '1rem', borderRadius: '6px', color: '#f4f1ee' }}>
+            <div key={i} style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '6px', color: 'var(--text-light)' }}>
               <strong>{contact.Name}</strong>
               <p style={{ margin: '0.5rem 0 0 0' }}>{contact.Title}</p>
               <p style={{ margin: 0 }}>{contact.Email}</p>
               <p style={{ margin: 0 }}>{contact.Phone}</p>
               <button
                 onClick={() => addAdhocEmail(contact.Email)}
-                style={{
-                  marginTop: '0.5rem',
-                  padding: '0.25rem 0.75rem',
-                  background: '#4e7267',
-                  color: '#f4f1ee',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '0.9rem'
-                }}
+                className="btn"
+                style={{ marginTop: '0.5rem', padding: '0.25rem 0.75rem', borderRadius: '6px', fontSize: '0.9rem' }}
               >
                 Add to Email List
               </button>
@@ -87,7 +68,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
           ))}
         </div>
       ) : (
-        <p style={{ color: '#aaa' }}>No matching contacts.</p>
+        <p style={{ color: 'var(--text-muted)' }}>No matching contacts.</p>
       )}
     </div>
   )
