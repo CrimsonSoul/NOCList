@@ -75,3 +75,9 @@ ipcMain.on('open-excel-file', (event, filename) => {
     shell.openPath(filePath)
   }
 })
+
+ipcMain.handle('open-external-link', async (_event, url) => {
+  if (url) {
+    await shell.openExternal(url)
+  }
+})
