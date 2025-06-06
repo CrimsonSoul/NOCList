@@ -50,17 +50,30 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
       </div>
 
       {filtered.length > 0 ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '1rem'
+          }}
+        >
           {filtered.map((contact, i) => (
-            <div key={i} style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '6px', color: 'var(--text-light)' }}>
+            <div key={i} className="contact-card">
               <strong>{contact.Name}</strong>
               <p style={{ margin: '0.5rem 0 0 0' }}>{contact.Title}</p>
-              <p style={{ margin: 0 }}>{contact.Email}</p>
+              <p style={{ margin: 0 }}>
+                <a href={`mailto:${contact.Email}`}>{contact.Email}</a>
+              </p>
               <p style={{ margin: 0 }}>{contact.Phone}</p>
               <button
                 onClick={() => addAdhocEmail(contact.Email)}
                 className="btn"
-                style={{ marginTop: '0.5rem', padding: '0.25rem 0.75rem', borderRadius: '6px', fontSize: '0.9rem' }}
+                style={{
+                  marginTop: '0.5rem',
+                  padding: '0.25rem 0.75rem',
+                  borderRadius: '6px',
+                  fontSize: '0.9rem'
+                }}
               >
                 Add to Email List
               </button>
