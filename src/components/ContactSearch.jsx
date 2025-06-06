@@ -17,29 +17,35 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
   return (
     <div>
       <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1rem', gap: '0.5rem' }}>
-        <input
-          type="text"
-          placeholder="Search contacts..."
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          className="input"
-          style={{ width: '100%', maxWidth: '300px', borderRadius: '6px' }}
-        />
-        {query && (
-          <button
-            onClick={() => setQuery('')}
-            style={{
-              background: 'transparent',
-              color: '#aaa',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '1rem'
-            }}
-            title="Clear search"
-          >
-            ✕
-          </button>
-        )}
+        <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
+          <input
+            type="text"
+            placeholder="Search contacts..."
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            className="input"
+            style={{ width: '100%', paddingRight: '1.5rem', borderRadius: '6px' }}
+          />
+          {query && (
+            <button
+              onClick={() => setQuery('')}
+              style={{
+                background: 'transparent',
+                color: '#aaa',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                position: 'absolute',
+                right: '0.25rem',
+                top: '50%',
+                transform: 'translateY(-50%)'
+              }}
+              title="Clear search"
+            >
+              ✕
+            </button>
+          )}
+        </div>
         <button
           onClick={() => window.nocListAPI?.openFile?.('contacts.xlsx')}
           className="btn btn-secondary"

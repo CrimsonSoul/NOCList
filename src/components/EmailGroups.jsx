@@ -67,29 +67,35 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       </div>
 
       <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
-        <input
-          type="text"
-          placeholder="Search groups..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="input"
-          style={{ width: '300px' }}
-        />
-        {search && (
-          <button
-            onClick={() => setSearch('')}
-            style={{
-              background: 'transparent',
-              color: '#aaa',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '1rem'
-            }}
-            title="Clear search"
-          >
-            ✕
-          </button>
-        )}
+        <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
+          <input
+            type="text"
+            placeholder="Search groups..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="input"
+            style={{ width: '100%', paddingRight: '1.5rem' }}
+          />
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              style={{
+                background: 'transparent',
+                color: '#aaa',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                position: 'absolute',
+                right: '0.25rem',
+                top: '50%',
+                transform: 'translateY(-50%)'
+              }}
+              title="Clear search"
+            >
+              ✕
+            </button>
+          )}
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
