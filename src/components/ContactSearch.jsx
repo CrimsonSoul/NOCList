@@ -34,7 +34,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
   return (
     <div>
       <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1rem', gap: '0.5rem' }}>
-        <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
+        <div style={{ position: 'relative', flex: '1 1 250px', minWidth: 0, maxWidth: '300px' }}>
           <input
             type="text"
             placeholder="Search contacts..."
@@ -56,7 +56,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
         <button
           onClick={() => window.nocListAPI?.openFile?.('contacts.xlsx')}
           className="btn btn-secondary"
-          style={{ borderRadius: '6px' }}
+          style={{ borderRadius: '6px', flexShrink: 0 }}
         >
           Open Contact List Excel
         </button>

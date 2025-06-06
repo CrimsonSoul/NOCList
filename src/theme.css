@@ -49,7 +49,7 @@ body {
   cursor: pointer;
   font-size: 1rem;
   position: absolute;
-  right: 0.25rem;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
   opacity: 0.8;
@@ -89,6 +89,7 @@ body {
 /* Utility class to stack flex children on narrow screens */
 .stack-on-small {
   display: flex;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 450px) {
