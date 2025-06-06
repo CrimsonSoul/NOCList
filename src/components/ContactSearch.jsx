@@ -34,14 +34,14 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
   return (
     <div>
       <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1rem', gap: '0.5rem' }}>
-        <div style={{ position: 'relative', flex: '1 1 250px', maxWidth: '300px' }}>
+        <div style={{ position: 'relative', flex: '1 1 250px', minWidth: 0, maxWidth: '300px' }}>
           <input
             type="text"
             placeholder="Search contacts..."
             value={query}
             onChange={e => setQuery(e.target.value)}
-            className="input"
-            style={{ width: '100%', paddingRight: '1.5rem', borderRadius: '6px' }}
+              className="input"
+              style={{ width: '100%', paddingRight: '2rem', borderRadius: '6px' }}
           />
           {query && (
             <button
@@ -53,11 +53,11 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
             </button>
           )}
         </div>
-        <button
-          onClick={() => window.nocListAPI?.openFile?.('contacts.xlsx')}
-          className="btn btn-secondary"
-          style={{ borderRadius: '6px' }}
-        >
+          <button
+            onClick={() => window.nocListAPI?.openFile?.('contacts.xlsx')}
+            className="btn btn-secondary open-contact-btn"
+            style={{ borderRadius: '6px' }}
+          >
           Open Contact List Excel
         </button>
       </div>
