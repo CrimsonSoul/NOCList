@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups, setAdhocEmails }) => {
   const [mergedEmails, setMergedEmails] = useState([])
@@ -45,6 +46,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       navigator.clipboard.writeText(mergedEmails.join(', '))
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
+      toast.success('Email list copied to clipboard')
     }
   }
 
@@ -52,6 +54,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
     if (mergedEmails.length > 0) {
       const url = `https://teams.microsoft.com/l/meeting/new?attendees=${encodeURIComponent(mergedEmails.join(','))}`
       window.nocListAPI?.openExternal?.(url)
+      toast.success('Opening Teams meeting')
     }
   }
 
@@ -93,7 +96,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
           <button
             key={group.name}
             onClick={() => toggleSelect(group.name)}
-            className="btn"
+            className="btn fade-in"
             style={{
               background: selectedGroups.includes(group.name) ? 'var(--accent)' : '#444'
             }}
@@ -105,7 +108,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
           </button>
         ))}
         {(selectedGroups.length > 0 || adhocEmails.length > 0) && (
-          <button onClick={clearAll} className="btn btn-secondary">
+          <button onClick={clearAll} className="btn btn-secondary fade-in">
             Clear All
           </button>
         )}
@@ -114,10 +117,10 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       {mergedEmails.length > 0 && (
         <>
           <div style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}>
-            <button onClick={copyToClipboard} className="btn">
+            <button onClick={copyToClipboard} className="btn fade-in">
               Copy Email List
             </button>
-            <button onClick={launchTeams} className="btn btn-secondary">
+            <button onClick={launchTeams} className="btn btn-secondary fade-in">
               Start Teams Meeting
             </button>
             {copied && <span style={{ color: 'lightgreen', alignSelf: 'center' }}>Copied</span>}
