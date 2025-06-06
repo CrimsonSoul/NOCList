@@ -72,9 +72,19 @@ body {
   display: flex;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 450px) {
   .stack-on-small {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* Mailto link styling */
+a[href^="mailto:"] {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+a[href^="mailto:"]:hover {
+  color: #b0896d;
 }
