@@ -1,4 +1,13 @@
-# NOCList
+# NOC List
+
+```
+    _   ______  ______   __    _      __ 
+   / | / / __ \/ ____/  / /   (_)____/ /_
+  /  |/ / / / / /      / /   / / ___/ __/
+ / /|  / /_/ / /___   / /___/ (__  ) /_  
+/_/ |_/\____/\____/  /_____/_/____/\__/  
+                                         
+```
 
 This project is a minimal React + Electron application for managing contacts and email groups.
 

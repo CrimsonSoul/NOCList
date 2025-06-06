@@ -59,7 +59,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
     <div>
       <div style={{ marginBottom: '1.5rem' }}>
         <button
-          onClick={() => window.fortnocAPI?.openFile?.('groups.xlsx')}
+          onClick={() => window.nocListAPI?.openFile?.('groups.xlsx')}
           className="btn btn-secondary"
         >
           Open Email Groups Excel
