@@ -60,13 +60,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       <div style={{ marginBottom: '1.5rem' }}>
         <button
           onClick={() => window.fortnocAPI?.openFile?.('groups.xlsx')}
-          style={{
-            background: '#5e3b2c',
-            color: '#f4f1ee',
-            padding: '0.5rem 1rem',
-            border: 'none',
-            borderRadius: '4px'
-          }}
+          className="btn btn-secondary"
         >
           Open Email Groups Excel
         </button>
@@ -78,14 +72,8 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
           placeholder="Search groups..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            width: '300px',
-            borderRadius: '4px',
-            border: '1px solid #444',
-            backgroundColor: '#222',
-            color: '#f4f1ee'
-          }}
+          className="input"
+          style={{ width: '300px' }}
         />
         {search && (
           <button
@@ -109,12 +97,9 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
           <button
             key={group.name}
             onClick={() => toggleSelect(group.name)}
+            className="btn"
             style={{
-              padding: '0.5rem 1rem',
-              background: selectedGroups.includes(group.name) ? '#82614f' : '#444',
-              color: '#f4f1ee',
-              border: 'none',
-              borderRadius: '4px'
+              background: selectedGroups.includes(group.name) ? 'var(--accent)' : '#444'
             }}
           >
             {group.name}
@@ -124,7 +109,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
           </button>
         ))}
         {(selectedGroups.length > 0 || adhocEmails.length > 0) && (
-          <button onClick={clearAll} style={{ padding: '0.5rem 1rem', background: '#59493f', color: '#f4f1ee', border: 'none', borderRadius: '4px' }}>
+          <button onClick={clearAll} className="btn btn-secondary">
             Clear All
           </button>
         )}
@@ -133,15 +118,15 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       {mergedEmails.length > 0 && (
         <>
           <div style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}>
-            <button onClick={copyToClipboard} style={{ background: '#4e7267', color: '#f4f1ee', padding: '0.5rem 1rem', border: 'none', borderRadius: '4px' }}>
+            <button onClick={copyToClipboard} className="btn">
               Copy Email List
             </button>
-            <button onClick={launchTeams} style={{ background: '#5e3b2c', color: '#f4f1ee', padding: '0.5rem 1rem', border: 'none', borderRadius: '4px' }}>
+            <button onClick={launchTeams} className="btn btn-secondary">
               Start Teams Meeting
             </button>
             {copied && <span style={{ color: 'lightgreen', alignSelf: 'center' }}>Copied</span>}
           </div>
-          <div style={{ background: '#2e261f', padding: '1rem', borderRadius: '4px', color: '#f4f1ee' }}>
+          <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '4px', color: 'var(--text-light)' }}>
             <strong>Merged Emails:</strong>
             <div style={{ wordBreak: 'break-word', marginTop: '0.5rem' }}>
               {mergedEmails.join(', ')}

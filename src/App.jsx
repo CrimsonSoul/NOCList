@@ -78,13 +78,13 @@ function App() {
 };
 
 return (
-    <div style={{ fontFamily: 'DM Sans, sans-serif', background: '#1e1b18', color: '#f4f1ee', minHeight: '100vh', padding: '2rem' }}><Toaster position="top-right" toastOptions={toastOptions} />
+    <div style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '2rem' }}><Toaster position="top-right" toastOptions={toastOptions} />
       <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Fort NOC</h1>
       <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
         <div style={{
       display: 'flex',
       gap: '2rem',
-      borderBottom: '1px solid #59493f',
+      borderBottom: '1px solid var(--border-color)',
       paddingBottom: '0.5rem',
       marginBottom: '1.5rem',
       fontSize: '1.05rem'
@@ -94,8 +94,8 @@ return (
         style={{
           cursor: 'pointer',
           paddingBottom: '0.25rem',
-          borderBottom: tab === 'email' ? '3px solid #82614f' : '3px solid transparent',
-          color: tab === 'email' ? '#f4f1ee' : '#aaa',
+          borderBottom: tab === 'email' ? '3px solid var(--accent)' : '3px solid transparent',
+          color: tab === 'email' ? 'var(--text-light)' : 'var(--text-muted)',
           fontWeight: tab === 'email' ? 'bold' : 'normal'
         }}
       >
@@ -106,8 +106,8 @@ return (
         style={{
           cursor: 'pointer',
           paddingBottom: '0.25rem',
-          borderBottom: tab === 'contact' ? '3px solid #82614f' : '3px solid transparent',
-          color: tab === 'contact' ? '#f4f1ee' : '#aaa',
+          borderBottom: tab === 'contact' ? '3px solid var(--accent)' : '3px solid transparent',
+          color: tab === 'contact' ? 'var(--text-light)' : 'var(--text-muted)',
           fontWeight: tab === 'contact' ? 'bold' : 'normal'
         }}
       >
@@ -120,7 +120,7 @@ return (
 
 <button
           onClick={refreshData}
-          style={{ background: '#4e7267', color: '#f4f1ee', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px' }}
+          className="btn"
         >
           Refresh Data
         </button>

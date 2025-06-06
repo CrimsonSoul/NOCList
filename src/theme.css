@@ -1,0 +1,43 @@
+:root {
+  --bg-primary: #1e1b18;
+  --bg-secondary: #2e261f;
+  --text-light: #f4f1ee;
+  --text-muted: #aaa;
+  --accent: #82614f;
+  --button-bg: #4e7267;
+  --button-secondary: #5e3b2c;
+  --border-color: #59493f;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-primary);
+  color: var(--text-light);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--button-bg);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--accent);
+}
+
+.btn-secondary {
+  background: var(--button-secondary);
+}
+
+.input {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #222;
+  color: var(--text-light);
+}
