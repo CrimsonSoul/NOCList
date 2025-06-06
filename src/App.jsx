@@ -55,30 +55,32 @@ function App() {
   }, [tab])
 
   const toastOptions = {
-  style: {
-    background: '#2e261f',
-    color: '#f4f1ee',
-    border: '1px solid #59493f',
-    fontSize: '0.9rem',
-  },
-  success: {
-    icon: '',
     style: {
-      background: '#334033',
-      color: '#d0f0d0',
+      background: 'var(--bg-secondary)',
+      color: 'var(--text-light)',
+      border: '1px solid var(--border-color)',
+      fontSize: '0.9rem',
+      borderRadius: '6px',
+      fontFamily: 'DM Sans, sans-serif',
     },
-  },
-  error: {
-    icon: '',
-    style: {
-      background: '#402e2e',
-      color: '#f4d0d0',
+    success: {
+      icon: '',
+      style: {
+        background: '#334033',
+        color: '#d0f0d0',
+      },
     },
-  },
-};
+    error: {
+      icon: '',
+      style: {
+        background: '#402e2e',
+        color: '#f4d0d0',
+      },
+    },
+  };
 
 return (
-    <div style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '2rem' }}><Toaster position="top-right" toastOptions={toastOptions} />
+    <div className="fade-in" style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '2rem' }}><Toaster position="top-right" toastOptions={toastOptions} />
       <pre style={{
         fontFamily: 'monospace',
         fontSize: '1rem',
