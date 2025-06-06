@@ -74,7 +74,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="input"
-            style={{ width: '100%', paddingRight: '1.5rem' }}
+            style={{ width: '100%', paddingRight: '1.75rem' }}
           />
           {search && (
             <button
