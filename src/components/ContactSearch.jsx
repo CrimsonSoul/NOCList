@@ -34,7 +34,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
   return (
     <div>
       <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1rem', gap: '0.5rem' }}>
-        <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
+        <div style={{ position: 'relative', flex: 1, minWidth: 0 }}>
           <input
             type="text"
             placeholder="Search contacts..."
@@ -46,17 +46,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
           {query && (
             <button
               onClick={() => setQuery('')}
-              style={{
-                background: 'transparent',
-                color: '#aaa',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                position: 'absolute',
-                right: '0.25rem',
-                top: '50%',
-                transform: 'translateY(-50%)'
-              }}
+              className="clear-btn"
               title="Clear search"
             >
               ✕
