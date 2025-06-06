@@ -92,8 +92,9 @@ return (
 /_/ |_|\____/\____/  /_____/_/____/\__/`}
       </pre>
       <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-        <div style={{
-      display: 'flex',
+      <div
+        className="stack-on-small"
+        style={{
       gap: '2rem',
       borderBottom: '1px solid var(--border-color)',
       paddingBottom: '0.5rem',
@@ -127,7 +128,9 @@ return (
     </div>
       </div>
 
-      <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+      <div
+        className="stack-on-small"
+        style={{ fontFamily: 'DM Sans, sans-serif', gap: '1rem', marginBottom: '1rem' }}>
 
 <button
           onClick={refreshData}

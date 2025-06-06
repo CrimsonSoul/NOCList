@@ -66,7 +66,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
         </button>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
+      <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
         <input
           type="text"
           placeholder="Search groups..."

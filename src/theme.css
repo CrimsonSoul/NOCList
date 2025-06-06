@@ -41,3 +41,15 @@ body {
   background-color: #222;
   color: var(--text-light);
 }
+
+/* Utility class to stack flex children on narrow screens */
+.stack-on-small {
+  display: flex;
+}
+
+@media (max-width: 600px) {
+  .stack-on-small {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
