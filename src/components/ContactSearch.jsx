@@ -1,5 +1,22 @@
 import React, { useState, useEffect } from 'react'
 
+const formatPhones = (value) => {
+  if (value === undefined || value === null) return ''
+  return String(value)
+    .split(/[\\/;,]+/)
+    .map((num) => num.trim())
+    .filter(Boolean)
+    .map((num) => {
+      const digits = num.replace(/\D/g, '')
+      if (!digits) return ''
+      const country = digits.length > 10 ? digits.slice(0, digits.length - 10) : '1'
+      const local = digits.slice(-10)
+      return `+${country} ${local}`
+    })
+    .filter(Boolean)
+    .join(', ')
+}
+
 const ContactSearch = ({ contactData, addAdhocEmail }) => {
   const [query, setQuery] = useState('')
   const [filtered, setFiltered] = useState(contactData || [])
@@ -70,7 +87,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
               <p style={{ margin: 0 }}>
                 <a href={`mailto:${contact.Email}`}>{contact.Email}</a>
               </p>
-              <p style={{ margin: 0 }}>{contact.Phone}</p>
+              <p style={{ margin: 0 }}>{formatPhones(contact.Phone)}</p>
               <button
                 onClick={() => addAdhocEmail(contact.Email)}
                 className="btn"
