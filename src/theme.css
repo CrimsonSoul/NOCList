@@ -83,6 +83,8 @@ body {
 a[href^="mailto:"] {
   color: var(--accent);
   text-decoration: underline;
+  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 a[href^="mailto:"]:hover {
