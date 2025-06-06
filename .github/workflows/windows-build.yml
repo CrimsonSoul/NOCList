@@ -1,0 +1,23 @@
+name: Windows Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npx vitest run
+      - run: npm run package
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: NOCList-win32-x64
+          path: dist/NOCList-win32-x64
