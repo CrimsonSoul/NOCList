@@ -3,15 +3,13 @@ const path = require('path')
 const fs = require('fs')
 const xlsx = require('xlsx')
 
-const basePath = app.isPackaged ? path.dirname(process.execPath) : __dirname
-
 let win
 let cachedData = { emailData: [], contactData: [] }
 
 function loadExcelFiles() {
   try {
-    const groupsPath = path.join(basePath, 'groups.xlsx')
-    const contactsPath = path.join(basePath, 'contacts.xlsx')
+    const groupsPath = path.join(__dirname, 'groups.xlsx')
+    const contactsPath = path.join(__dirname, 'contacts.xlsx')
 
     const groupWorkbook = xlsx.readFile(groupsPath)
     const contactWorkbook = xlsx.readFile(contactsPath)
@@ -40,19 +38,15 @@ function createWindow() {
     }
   })
 
-  if (app.isPackaged) {
-    win.loadFile(path.join(__dirname, 'dist', 'index.html'))
-  } else {
-    win.loadURL('http://localhost:5173/')
-  }
+  win.loadURL('http://localhost:5173/')
 }
 
 app.whenReady().then(() => {
   createWindow()
   loadExcelFiles()
 
-  const groupsPath = path.join(basePath, 'groups.xlsx')
-  const contactsPath = path.join(basePath, 'contacts.xlsx')
+  const groupsPath = path.join(__dirname, 'groups.xlsx')
+  const contactsPath = path.join(__dirname, 'contacts.xlsx')
 
   [groupsPath, contactsPath].forEach(filePath => {
     fs.watchFile(filePath, { interval: 1000 }, () => {
@@ -76,7 +70,7 @@ ipcMain.on('load-excel-data', (event) => {
 })
 
 ipcMain.on('open-excel-file', (event, filename) => {
-  const filePath = path.join(basePath, filename)
+  const filePath = path.join(__dirname, filename)
   if (fs.existsSync(filePath)) {
     shell.openPath(filePath)
   }
