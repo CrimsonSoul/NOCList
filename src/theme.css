@@ -3,6 +3,7 @@
   --bg-secondary: #2e261f;
   --text-light: #f4f1ee;
   --text-muted: #aaa;
+  --text-dark: #1e1b18;
   --accent: #82614f;
   --button-bg: #88d4c4;
   --button-secondary: #5e3b2c;
@@ -21,7 +22,7 @@ body {
   border: none;
   border-radius: 4px;
   background: var(--button-bg);
-  color: var(--text-light);
+  color: var(--text-dark);
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 }
@@ -33,6 +34,7 @@ body {
 
 .btn-secondary {
   background: var(--button-secondary);
+  color: var(--text-light);
 }
 
 .open-contact-btn {
