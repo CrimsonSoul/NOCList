@@ -75,15 +75,15 @@ function App() {
     success: {
       icon: '',
       style: {
-        background: '#334033',
-        color: '#d0f0d0',
+        background: 'var(--accent)',
+        color: 'var(--text-dark)',
       },
     },
     error: {
       icon: '',
       style: {
-        background: '#402e2e',
-        color: '#f4d0d0',
+        background: 'var(--button-secondary)',
+        color: 'var(--text-light)',
       },
     },
   };
