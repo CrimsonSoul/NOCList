@@ -143,3 +143,22 @@ a[href^="mailto:"]:hover {
   color: var(--accent);
   text-decoration: underline;
 }
+
+/* Minimal themed scrollbars */
+body {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--accent) var(--bg-primary);
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--accent);
+  border-radius: 4px;
+}
