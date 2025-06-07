@@ -100,13 +100,13 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
             className="btn fade-in"
             style={{
               background: selectedGroups.includes(group.name)
-                ? 'var(--button-hover)'
+                ? 'var(--button-active)'
                 : 'var(--button-bg)',
               color: 'var(--text-light)'
             }}
           >
             {group.name}
-            <span style={{ marginLeft: '0.25rem', fontSize: '0.8rem', color: '#c8bfb7' }}>
+            <span style={{ marginLeft: '0.25rem', fontSize: '0.8rem', color: 'var(--text-light)' }}>
               ({group.emails.length})
             </span>
           </button>

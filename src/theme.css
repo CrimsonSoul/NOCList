@@ -4,11 +4,12 @@
   --text-light: #f4f1ee;
   --text-muted: #aaa;
   --text-dark: #1e1b18;
-  --accent: #d2a679;
+  --accent: #c48d55;
   --button-bg: var(--accent);
-  --button-secondary: #a88565;
-  --button-hover: #e6ba8d;
-  --button-secondary-hover: #c29776;
+  --button-secondary: #8f6b4a;
+  --button-hover: #b57b46;
+  --button-secondary-hover: #a57855;
+  --button-active: #754f2e;
   --toast-success-bg: var(--button-bg);
   --toast-error-bg: #c86c5a;
   --border-color: #59493f;
@@ -39,6 +40,12 @@ body {
   transform: translateY(-2px);
 }
 
+.btn:active,
+.btn.active {
+  background: var(--button-active);
+  transform: translateY(0);
+}
+
 .btn-secondary {
   background: var(--button-secondary);
   color: var(--text-light);
@@ -47,6 +54,11 @@ body {
 .btn-secondary:hover {
   background: var(--button-secondary-hover);
   color: var(--text-light);
+}
+
+.btn-secondary:active,
+.btn-secondary.active {
+  background: var(--button-active);
 }
 
 .open-contact-btn {
