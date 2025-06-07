@@ -74,11 +74,16 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
           {filtered.map((contact, i) => (
             <div key={i} className="contact-card">
               <strong>{contact.Name}</strong>
-              <p style={{ margin: '0.5rem 0 0 0' }}>{contact.Title}</p>
+              <p style={{ margin: '0.5rem 0 0 0' }}>
+                <span className="label">Title:</span> {contact.Title}
+              </p>
               <p style={{ margin: 0 }}>
+                <span className="label">Email:</span>{' '}
                 <a href={`mailto:${contact.Email}`}>{contact.Email}</a>
               </p>
-              <p style={{ margin: 0 }}>{formatPhones(contact.Phone)}</p>
+              <p style={{ margin: 0 }}>
+                <span className="label">Phone:</span> {formatPhones(contact.Phone)}
+              </p>
               <button
                 onClick={() => addAdhocEmail(contact.Email)}
                 className="btn"
