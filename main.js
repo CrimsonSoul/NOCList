@@ -34,6 +34,7 @@ function createWindow() {
     width: 1000,
     height: 800,
     icon: path.join(basePath, 'icon.png'),
+    show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -46,6 +47,10 @@ function createWindow() {
   } else {
     win.loadURL('http://localhost:5173/')
   }
+
+  win.once('ready-to-show', () => {
+    win.show()
+  })
 }
 
 app.whenReady().then(() => {
