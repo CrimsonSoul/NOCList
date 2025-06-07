@@ -66,7 +66,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 300px))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 420px))',
             justifyContent: 'start',
             gap: '1rem'
           }}
@@ -79,7 +79,12 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
               </p>
               <p style={{ margin: 0 }}>
                 <span className="label">Email:</span>{' '}
-                <a href={`mailto:${contact.Email}`}>{contact.Email}</a>
+                <a
+                  href={`mailto:${contact.Email}`}
+                  style={{ whiteSpace: 'nowrap' }}
+                >
+                  {contact.Email}
+                </a>
               </p>
               <p style={{ margin: 0 }}>
                 <span className="label">Phone:</span> {formatPhones(contact.Phone)}
