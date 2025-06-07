@@ -50,7 +50,10 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
 
   const launchTeams = () => {
     if (mergedEmails.length > 0) {
-      const url = `https://teams.microsoft.com/l/meeting/new?attendees=${encodeURIComponent(mergedEmails.join(','))}`
+      const now = new Date()
+      const title = `${now.getMonth() + 1}/${now.getDate()}`
+      const url =
+        `https://teams.microsoft.com/l/meeting/new?subject=${encodeURIComponent(title)}&attendees=${encodeURIComponent(mergedEmails.join(','))}`
       window.nocListAPI?.openExternal?.(url)
       toast.success('Opening Teams meeting')
     }
