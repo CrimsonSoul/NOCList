@@ -73,17 +73,17 @@ function App() {
       fontFamily: 'DM Sans, sans-serif',
     },
     success: {
-      icon: '',
+      icon: '✓',
       style: {
-        background: 'var(--button-bg)',
-        color: 'var(--text-dark)',
+        background: 'var(--toast-success-bg)',
+        color: 'var(--text-light)',
       },
     },
     error: {
-      icon: '',
+      icon: '✕',
       style: {
-        background: 'var(--button-bg)',
-        color: 'var(--text-dark)',
+        background: 'var(--toast-error-bg)',
+        color: 'var(--text-light)',
       },
     },
   };

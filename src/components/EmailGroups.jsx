@@ -102,7 +102,7 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
               background: selectedGroups.includes(group.name)
                 ? 'var(--button-hover)'
                 : 'var(--button-bg)',
-              color: 'var(--text-dark)'
+              color: 'var(--text-light)'
             }}
           >
             {group.name}
