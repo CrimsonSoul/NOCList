@@ -99,8 +99,10 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
             onClick={() => toggleSelect(group.name)}
             className="btn fade-in"
             style={{
-              background: selectedGroups.includes(group.name) ? 'var(--accent)' : '#444',
-              color: 'var(--text-light)'
+              background: selectedGroups.includes(group.name)
+                ? 'var(--button-hover)'
+                : 'var(--button-bg)',
+              color: 'var(--text-dark)'
             }}
           >
             {group.name}

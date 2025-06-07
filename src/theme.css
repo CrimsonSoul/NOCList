@@ -5,8 +5,9 @@
   --text-muted: #aaa;
   --text-dark: #1e1b18;
   --accent: #d2a679;
-  --button-bg: #88d4c4;
-  --button-secondary: #5e3b2c;
+  --button-bg: var(--accent);
+  --button-secondary: var(--accent);
+  --button-hover: #e6ba8d;
   --border-color: #59493f;
 }
 
@@ -30,14 +31,14 @@ body {
 }
 
 .btn:hover {
-  background: var(--accent);
-  color: var(--text-light);
+  background: var(--button-hover);
+  color: var(--text-dark);
   transform: translateY(-2px);
 }
 
 .btn-secondary {
   background: var(--button-secondary);
-  color: var(--text-light);
+  color: var(--text-dark);
 }
 
 .open-contact-btn {
