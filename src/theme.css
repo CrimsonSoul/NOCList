@@ -84,6 +84,16 @@ body {
   animation: fade-in 0.3s ease;
 }
 
+.contact-card strong {
+  color: var(--accent);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.contact-card p {
+  color: var(--text-light);
+}
+
 .label {
   font-weight: 600;
   color: var(--accent);
