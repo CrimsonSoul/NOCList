@@ -96,7 +96,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
                   marginTop: '0.5rem',
                   padding: '0.25rem 0.75rem',
                   borderRadius: '6px',
-                  fontSize: '0.9rem'
+                  fontSize: '1rem'
                 }}
               >
                 Add to Email List

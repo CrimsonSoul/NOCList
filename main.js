@@ -78,6 +78,7 @@ app.on('window-all-closed', () => {
 })
 
 ipcMain.on('load-excel-data', (event) => {
+  loadExcelFiles()
   event.returnValue = cachedData
 })
 
