@@ -5,11 +5,12 @@
   --text-muted: #aaa;
   --text-dark: #1e1b18;
   --accent: #c48d55;
-  --button-bg: var(--accent);
-  --button-secondary: #8f6b4a;
-  --button-hover: #b57b46;
-  --button-secondary-hover: #a57855;
-  --button-active: #754f2e;
+  --button-bg: #8b522f;
+  --button-secondary: #654326;
+  --button-hover: #a05f32;
+  --button-secondary-hover: #7a4f2d;
+  --button-active: #6e3d1f;
+  --button-text: #ffffff;
   --toast-success-bg: var(--button-bg);
   --toast-error-bg: #c86c5a;
   --border-color: #59493f;
@@ -23,20 +24,21 @@ body {
 }
 
 .btn {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 4px;
   background: var(--button-bg);
-  color: var(--text-light);
+  color: var(--button-text);
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 1.1rem;
   font-family: 'DM Sans', sans-serif;
   transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
 }
 
 .btn:hover {
   background: var(--button-hover);
-  color: var(--text-light);
+  color: var(--button-text);
   transform: translateY(-2px);
 }
 
@@ -44,21 +46,23 @@ body {
 .btn.active {
   background: var(--button-active);
   transform: translateY(0);
+  color: var(--button-text);
 }
 
 .btn-secondary {
   background: var(--button-secondary);
-  color: var(--text-light);
+  color: var(--button-text);
 }
 
 .btn-secondary:hover {
   background: var(--button-secondary-hover);
-  color: var(--text-light);
+  color: var(--button-text);
 }
 
 .btn-secondary:active,
 .btn-secondary.active {
   background: var(--button-active);
+  color: var(--button-text);
 }
 
 .open-contact-btn {
