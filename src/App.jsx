@@ -108,7 +108,7 @@ function App() {
     <div className="fade-in" style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '2rem' }}>
       <Toaster position="top-right" toastOptions={toastOptions} />
       <div style={{ position: 'fixed', top: '1rem', right: '1rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '0.5rem 1rem', textAlign: 'center', fontSize: '0.9rem' }}>
-        <div>Code: {currentCode}</div>
+        <div style={{ fontSize: '1.6rem', fontWeight: 'bold' }}>Code: {currentCode}</div>
         <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Prev: {previousCode || 'N/A'}</div>
         <div className="progress-container">
           <div key={progressKey} className="progress-bar" />
