@@ -13,6 +13,7 @@ function App() {
   const [logoAvailable, setLogoAvailable] = useState(false)
   const [currentCode, setCurrentCode] = useState('')
   const [previousCode, setPreviousCode] = useState('')
+  const [progressKey, setProgressKey] = useState(Date.now())
 
   const generateCode = () => Math.floor(10000 + Math.random() * 90000).toString()
 
@@ -22,12 +23,14 @@ function App() {
     setContactData(contactData)
     setLastRefresh(new Date().toLocaleString())
     setCurrentCode(generateCode())
+    setProgressKey(Date.now())
   }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
       setPreviousCode(currentCode)
       setCurrentCode(generateCode())
+      setProgressKey(Date.now())
     }, 5 * 60 * 1000)
     return () => clearInterval(interval)
   }, [currentCode])
@@ -107,6 +110,9 @@ function App() {
       <div style={{ position: 'fixed', top: '1rem', right: '1rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '0.5rem 1rem', textAlign: 'center', fontSize: '0.9rem' }}>
         <div>Code: {currentCode}</div>
         <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Prev: {previousCode || 'N/A'}</div>
+        <div className="progress-container">
+          <div key={progressKey} className="progress-bar" />
+        </div>
       </div>
       {logoAvailable ? (
         <img src="logo.png" alt="NOC List Logo" style={{ width: '200px', marginBottom: '1rem' }} />

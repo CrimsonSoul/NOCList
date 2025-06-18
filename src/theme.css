@@ -187,3 +187,32 @@ body::-webkit-scrollbar-thumb {
   background-color: var(--accent);
   border-radius: 4px;
 }
+
+/* Progress bar for code timer */
+.progress-container {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: var(--bg-primary);
+  margin-top: 0.25rem;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--accent);
+  animation: code-progress 300s linear forwards;
+}
+
+@keyframes code-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
