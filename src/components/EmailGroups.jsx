@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-hot-toast'
 
 const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups, setAdhocEmails }) => {
@@ -15,49 +15,57 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
   }, [emailData])
 
   const filteredGroups = useMemo(() => {
-    return groups.filter(group =>
-      group.name.toLowerCase().includes(search.toLowerCase())
-    )
+    const term = search.toLowerCase()
+    return groups.filter((group) => group.name.toLowerCase().includes(term))
   }, [groups, search])
 
+  const groupMap = useMemo(
+    () => new Map(groups.map((g) => [g.name, g.emails])),
+    [groups]
+  )
+
   const mergedEmails = useMemo(() => {
-    const all = selectedGroups.flatMap(name => {
-      const group = groups.find(g => g.name === name)
-      return group ? group.emails : []
-    })
+    const all = selectedGroups.flatMap((name) => groupMap.get(name) || [])
     return [...new Set([...all, ...adhocEmails])]
-  }, [selectedGroups, groups, adhocEmails])
+  }, [selectedGroups, groupMap, adhocEmails])
 
-  const toggleSelect = name => {
-    setSelectedGroups(prev =>
-      prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]
-    )
-  }
+  const toggleSelect = useCallback(
+    (name) => {
+      setSelectedGroups((prev) =>
+        prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
+      )
+    },
+    [setSelectedGroups]
+  )
 
-  const clearAll = () => {
+  const clearAll = useCallback(() => {
     setSelectedGroups([])
     setAdhocEmails([])
-  }
+  }, [setSelectedGroups, setAdhocEmails])
 
-  const copyToClipboard = () => {
-    if (mergedEmails.length > 0) {
-      navigator.clipboard.writeText(mergedEmails.join(', '))
+  const copyToClipboard = useCallback(async () => {
+    if (mergedEmails.length === 0) return
+    try {
+      await navigator.clipboard.writeText(mergedEmails.join(', '))
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
       toast.success('Email list copied to clipboard')
+    } catch {
+      toast.error('Failed to copy')
     }
-  }
+  }, [mergedEmails])
 
-  const launchTeams = () => {
-    if (mergedEmails.length > 0) {
-      const now = new Date()
-      const title = `${now.getMonth() + 1}/${now.getDate()}`
-      const url =
-        `https://teams.microsoft.com/l/meeting/new?subject=${encodeURIComponent(title)}&attendees=${encodeURIComponent(mergedEmails.join(','))}`
-      window.nocListAPI?.openExternal?.(url)
-      toast.success('Opening Teams meeting')
-    }
-  }
+  const launchTeams = useCallback(() => {
+    if (mergedEmails.length === 0) return
+    const now = new Date()
+    const title = `${now.getMonth() + 1}/${now.getDate()}`
+    const url =
+      `https://teams.microsoft.com/l/meeting/new?subject=${encodeURIComponent(
+        title
+      )}&attendees=${encodeURIComponent(mergedEmails.join(','))}`
+    window.nocListAPI?.openExternal?.(url)
+    toast.success('Opening Teams meeting')
+  }, [mergedEmails])
 
   return (
     <div>

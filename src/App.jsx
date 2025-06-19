@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import EmailGroups from './components/EmailGroups'
 import ContactSearch from './components/ContactSearch'
 import { Toaster, toast } from 'react-hot-toast'
@@ -15,25 +15,36 @@ function App() {
   const [previousCode, setPreviousCode] = useState('')
   const [progressKey, setProgressKey] = useState(Date.now())
 
-  const generateCode = () => Math.floor(10000 + Math.random() * 90000).toString()
+  const generateCode = useCallback(
+    () => Math.floor(10000 + Math.random() * 90000).toString(),
+    []
+  )
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+  const codeRef = useRef('')
 
   useEffect(() => {
     const { emailData, contactData } = window.nocListAPI.loadExcelData()
     setEmailData(emailData)
     setContactData(contactData)
     setLastRefresh(new Date().toLocaleString())
-    setCurrentCode(generateCode())
+    const newCode = generateCode()
+    codeRef.current = newCode
+    setCurrentCode(newCode)
     setProgressKey(Date.now())
   }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPreviousCode(currentCode)
-      setCurrentCode(generateCode())
+      setPreviousCode(codeRef.current)
+      const newCode = generateCode()
+      codeRef.current = newCode
+      setCurrentCode(newCode)
       setProgressKey(Date.now())
     }, 5 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [currentCode])
+  }, [])
 
   useEffect(() => {
     fetch('logo.png', { method: 'HEAD' })
@@ -54,55 +65,60 @@ function App() {
     }
   }, [])
 
-  const refreshData = () => {
+  const refreshData = useCallback(() => {
     const { emailData, contactData } = window.nocListAPI.loadExcelData()
     setEmailData(emailData)
     setContactData(contactData)
     setLastRefresh(new Date().toLocaleString())
     setAdhocEmails([])
     toast.success('Data refreshed')
-  }
+  }, [])
 
-  const isValidEmail = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  const isValidEmail = useCallback((email) => emailRegex.test(email), [])
 
-  const addAdhocEmail = (email) => {
-    if (isValidEmail(email)) {
-      setAdhocEmails(prev => [...new Set([...prev, email])])
-      toast.success(`Added ${email}`)
-    } else {
-      toast.error('Invalid email address')
-    }
-  }
+  const addAdhocEmail = useCallback(
+    (email) => {
+      if (isValidEmail(email)) {
+        setAdhocEmails((prev) => [...new Set([...prev, email])])
+        toast.success(`Added ${email}`)
+      } else {
+        toast.error('Invalid email address')
+      }
+    },
+    [isValidEmail]
+  )
 
   useEffect(() => {
     localStorage.setItem('activeTab', tab)
   }, [tab])
 
-  const toastOptions = {
-    style: {
-      background: 'var(--bg-secondary)',
-      color: 'var(--text-light)',
-      border: '1px solid var(--border-color)',
-      fontSize: '0.9rem',
-      borderRadius: '6px',
-      fontFamily: 'DM Sans, sans-serif',
-    },
-    success: {
-      icon: '✓',
+  const toastOptions = useMemo(
+    () => ({
       style: {
-        background: 'var(--toast-success-bg)',
+        background: 'var(--bg-secondary)',
         color: 'var(--text-light)',
+        border: '1px solid var(--border-color)',
+        fontSize: '0.9rem',
+        borderRadius: '6px',
+        fontFamily: 'DM Sans, sans-serif',
       },
-    },
-    error: {
-      icon: '✕',
-      style: {
-        background: 'var(--toast-error-bg)',
-        color: 'var(--text-light)',
+      success: {
+        icon: '✓',
+        style: {
+          background: 'var(--toast-success-bg)',
+          color: 'var(--text-light)',
+        },
       },
-    },
-  };
+      error: {
+        icon: '✕',
+        style: {
+          background: 'var(--toast-error-bg)',
+          color: 'var(--text-light)',
+        },
+      },
+    }),
+    []
+  )
 
   return (
     <div className="fade-in" style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '2rem' }}>
