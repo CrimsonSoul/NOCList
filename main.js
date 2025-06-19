@@ -7,6 +7,7 @@ const xlsx = require('xlsx')
 const basePath = app.isPackaged ? path.dirname(process.execPath) : __dirname
 
 let win
+let watcher
 let cachedData = { emailData: [], contactData: [] }
 
 function loadExcelFiles() {
@@ -61,7 +62,7 @@ app.whenReady().then(() => {
   const groupsPath = path.join(basePath, 'groups.xlsx')
   const contactsPath = path.join(basePath, 'contacts.xlsx')
 
-  const watcher = chokidar.watch([groupsPath, contactsPath], {
+  watcher = chokidar.watch([groupsPath, contactsPath], {
     persistent: true,
     ignoreInitial: true,
   })
@@ -82,6 +83,12 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
+})
+
+app.on('will-quit', () => {
+  if (watcher) {
+    watcher.close()
+  }
 })
 
 ipcMain.on('load-excel-data', (event) => {

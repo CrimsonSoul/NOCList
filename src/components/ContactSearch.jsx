@@ -19,15 +19,14 @@ const formatPhones = (value) => {
 
 const ContactSearch = ({ contactData, addAdhocEmail }) => {
   const [query, setQuery] = useState('')
-  const filtered = useMemo(
-    () =>
-      contactData.filter(c =>
-        Object.values(c).some(val =>
-          String(val).toLowerCase().includes(query.toLowerCase())
-        )
-      ),
-    [query, contactData]
-  )
+  const filtered = useMemo(() => {
+    const q = query.toLowerCase()
+    return contactData.filter((c) =>
+      Object.values(c).some((val) =>
+        String(val).toLowerCase().includes(q)
+      )
+    )
+  }, [query, contactData])
 
   return (
     <div>
