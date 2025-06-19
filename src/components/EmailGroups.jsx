@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups, setAdhocEmails }) => {
-  const [mergedEmails, setMergedEmails] = useState([])
   const [copied, setCopied] = useState(false)
   const [search, setSearch] = useState('')
 
@@ -20,13 +20,12 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
     )
   }, [groups, search])
 
-  useEffect(() => {
+  const mergedEmails = useMemo(() => {
     const all = selectedGroups.flatMap(name => {
       const group = groups.find(g => g.name === name)
       return group ? group.emails : []
     })
-    const combined = [...new Set([...all, ...adhocEmails])]
-    setMergedEmails(combined)
+    return [...new Set([...all, ...adhocEmails])]
   }, [selectedGroups, groups, adhocEmails])
 
   const toggleSelect = name => {
@@ -45,13 +44,18 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       navigator.clipboard.writeText(mergedEmails.join(', '))
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
+      toast.success('Email list copied to clipboard')
     }
   }
 
   const launchTeams = () => {
     if (mergedEmails.length > 0) {
-      const url = `https://teams.microsoft.com/l/meeting/new?attendees=${encodeURIComponent(mergedEmails.join(','))}`
+      const now = new Date()
+      const title = `${now.getMonth() + 1}/${now.getDate()}`
+      const url =
+        `https://teams.microsoft.com/l/meeting/new?subject=${encodeURIComponent(title)}&attendees=${encodeURIComponent(mergedEmails.join(','))}`
       window.nocListAPI?.openExternal?.(url)
+      toast.success('Opening Teams meeting')
     }
   }
 
@@ -66,30 +70,26 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
         </button>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
-        <input
-          type="text"
-          placeholder="Search groups..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="input"
-          style={{ width: '300px' }}
-        />
-        {search && (
-          <button
-            onClick={() => setSearch('')}
-            style={{
-              background: 'transparent',
-              color: '#aaa',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '1rem'
-            }}
-            title="Clear search"
-          >
-            ✕
-          </button>
-        )}
+      <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
+        <div style={{ position: 'relative', flex: '1 1 250px', maxWidth: '300px' }}>
+          <input
+            type="text"
+            placeholder="Search groups..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="input"
+            style={{ width: '100%', paddingRight: '1.75rem' }}
+          />
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              className="clear-btn"
+              title="Clear search"
+            >
+              ✕
+            </button>
+          )}
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
@@ -97,19 +97,22 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
           <button
             key={group.name}
             onClick={() => toggleSelect(group.name)}
-            className="btn"
+            className="btn fade-in"
             style={{
-              background: selectedGroups.includes(group.name) ? 'var(--accent)' : '#444'
+              background: selectedGroups.includes(group.name)
+                ? 'var(--button-active)'
+                : 'var(--button-bg)',
+              color: 'var(--text-light)'
             }}
           >
             {group.name}
-            <span style={{ marginLeft: '0.25rem', fontSize: '0.8rem', color: '#c8bfb7' }}>
+            <span style={{ marginLeft: '0.25rem', fontSize: '0.8rem', color: 'var(--text-light)' }}>
               ({group.emails.length})
             </span>
           </button>
         ))}
         {(selectedGroups.length > 0 || adhocEmails.length > 0) && (
-          <button onClick={clearAll} className="btn btn-secondary">
+          <button onClick={clearAll} className="btn btn-secondary fade-in">
             Clear All
           </button>
         )}
@@ -118,10 +121,10 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       {mergedEmails.length > 0 && (
         <>
           <div style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}>
-            <button onClick={copyToClipboard} className="btn">
+            <button onClick={copyToClipboard} className="btn fade-in">
               Copy Email List
             </button>
-            <button onClick={launchTeams} className="btn btn-secondary">
+            <button onClick={launchTeams} className="btn btn-secondary fade-in">
               Start Teams Meeting
             </button>
             {copied && <span style={{ color: 'lightgreen', alignSelf: 'center' }}>Copied</span>}

@@ -28,6 +28,16 @@ Vitest is used for unit testing. To run the test suite:
 npm test
 ```
 
+## Custom Logo and Icon
+
+To replace the ASCII logo shown in the app, add a `logo.png` file to the
+`public` folder. If the file exists it will be displayed instead of the
+text banner.
+
+For a custom application icon, place `icon.png` and `icon.ico` in the
+`public` folder. The packaging script automatically includes the
+ICO file when present.
+
 ## Packaging
 
 Build the React frontend and package the Electron app into a Windows executable:
@@ -39,6 +49,9 @@ npm run package
 The generated `release/NOCList-win32-x64` folder will contain `NOCList.exe`. Place
 `groups.xlsx` and `contacts.xlsx` next to the executable so the application can
 load them at runtime.
+
+If `public/icon.ico` exists it will be used as the Windows
+application icon.
 
 ## Continuous Integration
 

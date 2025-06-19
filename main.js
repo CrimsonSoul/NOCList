@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, shell } = require('electron')
 const path = require('path')
 const fs = require('fs')
+const chokidar = require('chokidar')
 const xlsx = require('xlsx')
 
 const basePath = app.isPackaged ? path.dirname(process.execPath) : __dirname
@@ -33,6 +34,8 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1000,
     height: 800,
+    icon: path.join(basePath, 'icon.png'),
+    show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -45,6 +48,10 @@ function createWindow() {
   } else {
     win.loadURL('http://localhost:5173/')
   }
+
+  win.once('ready-to-show', () => {
+    win.show()
+  })
 }
 
 app.whenReady().then(() => {
@@ -54,13 +61,19 @@ app.whenReady().then(() => {
   const groupsPath = path.join(basePath, 'groups.xlsx')
   const contactsPath = path.join(basePath, 'contacts.xlsx')
 
-  [groupsPath, contactsPath].forEach(filePath => {
-    fs.watchFile(filePath, { interval: 1000 }, () => {
-      console.log(`File changed: ${filePath}`)
-      loadExcelFiles()
-      win.webContents.send('excel-data-updated', cachedData)
-    })
+  const watcher = chokidar.watch([groupsPath, contactsPath], {
+    persistent: true,
+    ignoreInitial: true,
   })
+
+  const onChange = (filePath) => {
+    console.log(`File changed: ${filePath}`)
+    loadExcelFiles()
+    win.webContents.send('excel-data-updated', cachedData)
+  }
+
+  watcher.on('change', onChange)
+  watcher.on('add', onChange)
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -72,6 +85,7 @@ app.on('window-all-closed', () => {
 })
 
 ipcMain.on('load-excel-data', (event) => {
+  loadExcelFiles()
   event.returnValue = cachedData
 })
 
