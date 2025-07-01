@@ -1,0 +1,218 @@
+:root {
+  --bg-primary: #000000;
+  --bg-secondary: #1a1a1a;
+  --text-light: #ffffff;
+  --text-muted: #bbbbbb;
+  --text-dark: #000000;
+  --accent: #dddddd;
+  --button-bg: #333333;
+  --button-secondary: #444444;
+  --button-hover: #555555;
+  --button-secondary-hover: #666666;
+  --button-active: #777777;
+  --button-text: #ffffff;
+  --toast-success-bg: var(--button-bg);
+  --toast-error-bg: #555555;
+  --border-color: #444444;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-primary);
+  color: var(--text-light);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+}
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--button-hover);
+  color: var(--button-text);
+  transform: translateY(-2px);
+}
+
+.btn:active,
+.btn.active {
+  background: var(--button-active);
+  transform: translateY(0);
+  color: var(--button-text);
+}
+
+.btn-secondary {
+  background: var(--button-secondary);
+  color: var(--button-text);
+}
+
+.btn-secondary:hover {
+  background: var(--button-secondary-hover);
+  color: var(--button-text);
+}
+
+.btn-secondary:active,
+.btn-secondary.active {
+  background: var(--button-active);
+  color: var(--button-text);
+}
+
+.open-contact-btn {
+  flex-shrink: 0;
+}
+
+.input {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-light);
+}
+
+.clear-btn {
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.clear-btn:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* Contact cards */
+.contact-card {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 6px;
+  color: var(--text-light);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  animation: fade-in 0.3s ease;
+}
+
+.contact-card strong {
+  color: var(--accent);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.contact-card p {
+  color: var(--text-light);
+}
+
+.label {
+  font-weight: 600;
+  color: var(--accent);
+  margin-right: 0.25rem;
+}
+
+.contact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  background: #333333;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease;
+}
+
+/* Utility class to stack flex children on narrow screens */
+.stack-on-small {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 450px) {
+  .stack-on-small {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Mailto link styling */
+a[href^="mailto:"] {
+  color: var(--text-light);
+  text-decoration: none;
+}
+
+a[href^="mailto:"]:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* Minimal themed scrollbars */
+body {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--accent) var(--bg-primary);
+}
+
+body::-webkit-scrollbar {
+  width: 6px;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--accent);
+  border-radius: 4px;
+}
+
+/* Progress bar for code timer */
+.progress-container {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: var(--bg-primary);
+  margin-top: 0.25rem;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--accent);
+  animation: code-progress 300s linear forwards;
+}
+
+@keyframes code-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}

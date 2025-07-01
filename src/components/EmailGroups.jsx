@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups, setAdhocEmails }) => {
-  const [mergedEmails, setMergedEmails] = useState([])
   const [copied, setCopied] = useState(false)
   const [search, setSearch] = useState('')
 
@@ -20,13 +20,12 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
     )
   }, [groups, search])
 
-  useEffect(() => {
+  const mergedEmails = useMemo(() => {
     const all = selectedGroups.flatMap(name => {
       const group = groups.find(g => g.name === name)
       return group ? group.emails : []
     })
-    const combined = [...new Set([...all, ...adhocEmails])]
-    setMergedEmails(combined)
+    return [...new Set([...all, ...adhocEmails])]
   }, [selectedGroups, groups, adhocEmails])
 
   const toggleSelect = name => {
@@ -45,13 +44,18 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       navigator.clipboard.writeText(mergedEmails.join(', '))
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
+      toast.success('Email list copied to clipboard')
     }
   }
 
   const launchTeams = () => {
     if (mergedEmails.length > 0) {
-      const url = `https://teams.microsoft.com/l/meeting/new?attendees=${encodeURIComponent(mergedEmails.join(';'))}`
-      window.open(url, '_blank')
+      const now = new Date()
+      const title = `${now.getMonth() + 1}/${now.getDate()}`
+      const url =
+        `https://teams.microsoft.com/l/meeting/new?subject=${encodeURIComponent(title)}&attendees=${encodeURIComponent(mergedEmails.join(','))}`
+      window.nocListAPI?.openExternal?.(url)
+      toast.success('Opening Teams meeting')
     }
   }
 
@@ -59,49 +63,33 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
     <div>
       <div style={{ marginBottom: '1.5rem' }}>
         <button
-          onClick={() => window.fortnocAPI?.openFile?.('groups.xlsx')}
-          style={{
-            background: '#5e3b2c',
-            color: '#f4f1ee',
-            padding: '0.5rem 1rem',
-            border: 'none',
-            borderRadius: '4px'
-          }}
+          onClick={() => window.nocListAPI?.openFile?.('groups.xlsx')}
+          className="btn btn-secondary"
         >
           Open Email Groups Excel
         </button>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
-        <input
-          type="text"
-          placeholder="Search groups..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          style={{
-            padding: '0.5rem',
-            width: '300px',
-            borderRadius: '4px',
-            border: '1px solid #444',
-            backgroundColor: '#222',
-            color: '#f4f1ee'
-          }}
-        />
-        {search && (
-          <button
-            onClick={() => setSearch('')}
-            style={{
-              background: 'transparent',
-              color: '#aaa',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '1rem'
-            }}
-            title="Clear search"
-          >
-            ✕
-          </button>
-        )}
+      <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
+        <div style={{ position: 'relative', flex: '1 1 250px', maxWidth: '300px' }}>
+          <input
+            type="text"
+            placeholder="Search groups..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="input"
+            style={{ width: '100%', paddingRight: '1.75rem' }}
+          />
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              className="clear-btn"
+              title="Clear search"
+            >
+              ✕
+            </button>
+          )}
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
@@ -109,19 +97,22 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
           <button
             key={group.name}
             onClick={() => toggleSelect(group.name)}
+            className="btn fade-in"
             style={{
-              padding: '0.5rem 1rem',
-              background: selectedGroups.includes(group.name) ? '#82614f' : '#444',
-              color: '#f4f1ee',
-              border: 'none',
-              borderRadius: '4px'
+              background: selectedGroups.includes(group.name)
+                ? 'var(--button-active)'
+                : 'var(--button-bg)',
+              color: 'var(--text-light)'
             }}
           >
             {group.name}
+            <span style={{ marginLeft: '0.25rem', fontSize: '0.8rem', color: 'var(--text-light)' }}>
+              ({group.emails.length})
+            </span>
           </button>
         ))}
         {(selectedGroups.length > 0 || adhocEmails.length > 0) && (
-          <button onClick={clearAll} style={{ padding: '0.5rem 1rem', background: '#59493f', color: '#f4f1ee', border: 'none', borderRadius: '4px' }}>
+          <button onClick={clearAll} className="btn btn-secondary fade-in">
             Clear All
           </button>
         )}
@@ -130,15 +121,15 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       {mergedEmails.length > 0 && (
         <>
           <div style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}>
-            <button onClick={copyToClipboard} style={{ background: '#4e7267', color: '#f4f1ee', padding: '0.5rem 1rem', border: 'none', borderRadius: '4px' }}>
+            <button onClick={copyToClipboard} className="btn fade-in">
               Copy Email List
             </button>
-            <button onClick={launchTeams} style={{ background: '#5e3b2c', color: '#f4f1ee', padding: '0.5rem 1rem', border: 'none', borderRadius: '4px' }}>
+            <button onClick={launchTeams} className="btn btn-secondary fade-in">
               Start Teams Meeting
             </button>
             {copied && <span style={{ color: 'lightgreen', alignSelf: 'center' }}>Copied</span>}
           </div>
-          <div style={{ background: '#2e261f', padding: '1rem', borderRadius: '4px', color: '#f4f1ee' }}>
+          <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '4px', color: 'var(--text-light)' }}>
             <strong>Merged Emails:</strong>
             <div style={{ wordBreak: 'break-word', marginTop: '0.5rem' }}>
               {mergedEmails.join(', ')}

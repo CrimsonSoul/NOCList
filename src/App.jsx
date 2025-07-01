@@ -10,17 +10,42 @@ function App() {
   const [contactData, setContactData] = useState([])
   const [lastRefresh, setLastRefresh] = useState('N/A')
   const [tab, setTab] = useState(() => localStorage.getItem('activeTab') || 'email')
+  const [logoAvailable, setLogoAvailable] = useState(false)
+  const [currentCode, setCurrentCode] = useState('')
+  const [previousCode, setPreviousCode] = useState('')
+  const [progressKey, setProgressKey] = useState(Date.now())
+
+  const generateCode = () => Math.floor(10000 + Math.random() * 90000).toString()
 
   useEffect(() => {
-    const { emailData, contactData } = window.fortnocAPI.loadExcelData()
+    const { emailData, contactData } = window.nocListAPI.loadExcelData()
     setEmailData(emailData)
     setContactData(contactData)
     setLastRefresh(new Date().toLocaleString())
+    setCurrentCode(generateCode())
+    setProgressKey(Date.now())
   }, [])
 
   useEffect(() => {
-    if (window.fortnocAPI?.onExcelDataUpdate) {
-      window.fortnocAPI.onExcelDataUpdate((data) => {
+    const interval = setInterval(() => {
+      setPreviousCode(currentCode)
+      setCurrentCode(generateCode())
+      setProgressKey(Date.now())
+    }, 5 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [currentCode])
+
+  useEffect(() => {
+    fetch('logo.png', { method: 'HEAD' })
+      .then((res) => {
+        if (res.ok) setLogoAvailable(true)
+      })
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    if (window.nocListAPI?.onExcelDataUpdate) {
+      window.nocListAPI.onExcelDataUpdate((data) => {
         toast.success('Excel files updated automatically!')
         setEmailData(data.emailData || [])
         setContactData(data.contactData || [])
@@ -30,7 +55,7 @@ function App() {
   }, [])
 
   const refreshData = () => {
-    const { emailData, contactData } = window.fortnocAPI.loadExcelData()
+    const { emailData, contactData } = window.nocListAPI.loadExcelData()
     setEmailData(emailData)
     setContactData(contactData)
     setLastRefresh(new Date().toLocaleString())
@@ -55,36 +80,62 @@ function App() {
   }, [tab])
 
   const toastOptions = {
-  style: {
-    background: '#2e261f',
-    color: '#f4f1ee',
-    border: '1px solid #59493f',
-    fontSize: '0.9rem',
-  },
-  success: {
-    icon: '',
     style: {
-      background: '#334033',
-      color: '#d0f0d0',
+      background: 'var(--bg-secondary)',
+      color: 'var(--text-light)',
+      border: '1px solid var(--border-color)',
+      fontSize: '0.9rem',
+      borderRadius: '6px',
+      fontFamily: 'DM Sans, sans-serif',
     },
-  },
-  error: {
-    icon: '',
-    style: {
-      background: '#402e2e',
-      color: '#f4d0d0',
+    success: {
+      icon: '✓',
+      style: {
+        background: 'var(--toast-success-bg)',
+        color: 'var(--text-light)',
+      },
     },
-  },
-};
+    error: {
+      icon: '✕',
+      style: {
+        background: 'var(--toast-error-bg)',
+        color: 'var(--text-light)',
+      },
+    },
+  };
 
-return (
-    <div style={{ fontFamily: 'DM Sans, sans-serif', background: '#1e1b18', color: '#f4f1ee', minHeight: '100vh', padding: '2rem' }}><Toaster position="top-right" toastOptions={toastOptions} />
-      <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Fort NOC</h1>
+  return (
+    <div className="fade-in" style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '2rem' }}>
+      <Toaster position="top-right" toastOptions={toastOptions} />
+      <div style={{ position: 'fixed', top: '1rem', right: '1rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '0.5rem 1rem', textAlign: 'center', fontSize: '0.9rem' }}>
+        <div style={{ fontSize: '1.6rem', fontWeight: 'bold' }}>Code: {currentCode}</div>
+        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Prev: {previousCode || 'N/A'}</div>
+        <div className="progress-container">
+          <div key={progressKey} className="progress-bar" />
+        </div>
+      </div>
+      {logoAvailable ? (
+        <img src="logo.png" alt="NOC List Logo" style={{ width: '200px', marginBottom: '1rem' }} />
+      ) : (
+        <pre style={{
+          fontFamily: 'monospace',
+          fontSize: '1rem',
+          marginBottom: '1rem',
+          lineHeight: '1.2',
+        }}>
+          {`    _   ______  ______   __    _      __
+   / | / / __ \/ ____/  / /   (_)____/ /_
+  /  |/ / / / / /      / /   / / ___/ __/
+ / /|  / /_/ / /___   / /___/ (__  ) /_
+/_/ |_|\____/\____/  /_____/_/____/\__/`}
+        </pre>
+      )}
       <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-        <div style={{
-      display: 'flex',
+      <div
+        className="stack-on-small"
+        style={{
       gap: '2rem',
-      borderBottom: '1px solid #59493f',
+      borderBottom: '1px solid var(--border-color)',
       paddingBottom: '0.5rem',
       marginBottom: '1.5rem',
       fontSize: '1.05rem'
@@ -94,8 +145,8 @@ return (
         style={{
           cursor: 'pointer',
           paddingBottom: '0.25rem',
-          borderBottom: tab === 'email' ? '3px solid #82614f' : '3px solid transparent',
-          color: tab === 'email' ? '#f4f1ee' : '#aaa',
+          borderBottom: tab === 'email' ? '3px solid var(--accent)' : '3px solid transparent',
+          color: tab === 'email' ? 'var(--text-light)' : 'var(--text-muted)',
           fontWeight: tab === 'email' ? 'bold' : 'normal'
         }}
       >
@@ -106,8 +157,8 @@ return (
         style={{
           cursor: 'pointer',
           paddingBottom: '0.25rem',
-          borderBottom: tab === 'contact' ? '3px solid #82614f' : '3px solid transparent',
-          color: tab === 'contact' ? '#f4f1ee' : '#aaa',
+          borderBottom: tab === 'contact' ? '3px solid var(--accent)' : '3px solid transparent',
+          color: tab === 'contact' ? 'var(--text-light)' : 'var(--text-muted)',
           fontWeight: tab === 'contact' ? 'bold' : 'normal'
         }}
       >
@@ -116,11 +167,13 @@ return (
     </div>
       </div>
 
-      <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+      <div
+        className="stack-on-small"
+        style={{ fontFamily: 'DM Sans, sans-serif', gap: '1rem', marginBottom: '1rem' }}>
 
 <button
           onClick={refreshData}
-          style={{ background: '#4e7267', color: '#f4f1ee', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px' }}
+          className="btn"
         >
           Refresh Data
         </button>
