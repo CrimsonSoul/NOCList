@@ -1,71 +1,61 @@
-import React, { useMemo, useState, useCallback } from 'react'
-import { toast } from 'react-hot-toast'
+import React, { useMemo, useState, useCallback } from 'react';
+import { toast } from 'react-hot-toast';
 
 const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups, setAdhocEmails }) => {
-  const [copied, setCopied] = useState(false)
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState('');
 
   const groups = useMemo(() => {
-    if (emailData.length === 0) return []
-    const [headers, ...rows] = emailData
+    if (emailData.length === 0) return [];
+    const [headers, ...rows] = emailData;
     return headers.map((name, i) => ({
       name,
-      emails: rows.map(row => row[i]).filter(Boolean)
-    }))
-  }, [emailData])
+      emails: rows.map((row) => row[i]).filter(Boolean),
+    }));
+  }, [emailData]);
 
   const filteredGroups = useMemo(() => {
-    const term = search.toLowerCase()
-    return groups.filter((group) => group.name.toLowerCase().includes(term))
-  }, [groups, search])
+    const term = search.toLowerCase();
+    return groups.filter((group) => group.name.toLowerCase().includes(term));
+  }, [groups, search]);
 
-  const groupMap = useMemo(
-    () => new Map(groups.map((g) => [g.name, g.emails])),
-    [groups]
-  )
+  const groupMap = useMemo(() => new Map(groups.map((g) => [g.name, g.emails])), [groups]);
 
   const mergedEmails = useMemo(() => {
-    const all = selectedGroups.flatMap((name) => groupMap.get(name) || [])
-    return [...new Set([...all, ...adhocEmails])]
-  }, [selectedGroups, groupMap, adhocEmails])
+    const all = selectedGroups.flatMap((name) => groupMap.get(name) || []);
+    return [...new Set([...all, ...adhocEmails])];
+  }, [selectedGroups, groupMap, adhocEmails]);
 
-  const toggleSelect = useCallback(
-    (name) => {
-      setSelectedGroups((prev) =>
-        prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
-      )
-    },
-    [setSelectedGroups]
-  )
+  const toggleSelect = useCallback((name) => {
+    setSelectedGroups((prev) =>
+      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
+    );
+  }, []);
 
   const clearAll = useCallback(() => {
-    setSelectedGroups([])
-    setAdhocEmails([])
-  }, [setSelectedGroups, setAdhocEmails])
+    setSelectedGroups([]);
+    setAdhocEmails([]);
+  }, [setSelectedGroups, setAdhocEmails]);
 
   const copyToClipboard = useCallback(async () => {
-    if (mergedEmails.length === 0) return
+    if (mergedEmails.length === 0) return;
     try {
-      await navigator.clipboard.writeText(mergedEmails.join(', '))
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-      toast.success('Email list copied to clipboard')
+      await navigator.clipboard.writeText(mergedEmails.join(', '));
+      toast.success('Email list copied to clipboard');
     } catch {
-      toast.error('Failed to copy')
+      toast.error('Failed to copy');
     }
-  }, [mergedEmails])
+  }, [mergedEmails]);
 
   const launchTeams = useCallback(() => {
-    if (mergedEmails.length === 0) return
-    const now = new Date()
-    const title = `${now.getMonth() + 1}/${now.getDate()}`
-    const url =
-      `https://teams.microsoft.com/l/meeting/new?subject=${encodeURIComponent(
-        title
-      )}&attendees=${encodeURIComponent(mergedEmails.join(','))}`
-    window.nocListAPI?.openExternal?.(url)
-    toast.success('Opening Teams meeting')
-  }, [mergedEmails])
+    if (mergedEmails.length === 0) return;
+    const now = new Date();
+    const title = `${now.getMonth() + 1}/${now.getDate()}`;
+    const url = `https://teams.microsoft.com/l/meeting/new?subject=${encodeURIComponent(
+      title
+    )}&attendees=${encodeURIComponent(mergedEmails.join(','))}`;
+    window.nocListAPI?.openExternal?.(url);
+    toast.success('Opening Teams meeting');
+  }, [mergedEmails]);
 
   return (
     <div>
@@ -84,16 +74,12 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
             type="text"
             placeholder="Search groups..."
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             className="input"
             style={{ width: '100%', paddingRight: '1.75rem' }}
           />
           {search && (
-            <button
-              onClick={() => setSearch('')}
-              className="clear-btn"
-              title="Clear search"
-            >
+            <button onClick={() => setSearch('')} className="clear-btn" title="Clear search">
               ✕
             </button>
           )}
@@ -101,22 +87,14 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        {filteredGroups.map(group => (
+        {filteredGroups.map((group) => (
           <button
             key={group.name}
             onClick={() => toggleSelect(group.name)}
-            className="btn fade-in"
-            style={{
-              background: selectedGroups.includes(group.name)
-                ? 'var(--button-active)'
-                : 'var(--button-bg)',
-              color: 'var(--text-light)'
-            }}
+            className={`btn fade-in ${selectedGroups.includes(group.name) ? 'active' : ''}`}
           >
             {group.name}
-            <span style={{ marginLeft: '0.25rem', fontSize: '0.8rem', color: 'var(--text-light)' }}>
-              ({group.emails.length})
-            </span>
+            <span style={{ marginLeft: '0.25rem', fontSize: '0.8rem' }}>({group.emails.length})</span>
           </button>
         ))}
         {(selectedGroups.length > 0 || adhocEmails.length > 0) && (
@@ -135,18 +113,15 @@ const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups
             <button onClick={launchTeams} className="btn btn-secondary fade-in">
               Start Teams Meeting
             </button>
-            {copied && <span style={{ color: 'lightgreen', alignSelf: 'center' }}>Copied</span>}
           </div>
           <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '4px', color: 'var(--text-light)' }}>
             <strong>Merged Emails:</strong>
-            <div style={{ wordBreak: 'break-word', marginTop: '0.5rem' }}>
-              {mergedEmails.join(', ')}
-            </div>
+            <div style={{ wordBreak: 'break-word', marginTop: '0.5rem' }}>{mergedEmails.join(', ')}</div>
           </div>
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default EmailGroups
+export default EmailGroups;

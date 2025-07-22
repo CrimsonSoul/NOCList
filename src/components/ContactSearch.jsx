@@ -1,32 +1,32 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react';
+
+const formatPhone = (num) => {
+  const digits = num.replace(/\D/g, '');
+  if (!digits) return '';
+  const country = digits.length > 10 ? digits.slice(0, digits.length - 10) : '1';
+  const local = digits.slice(-10);
+  return `+${country} ${local}`;
+};
 
 const formatPhones = (value) => {
-  if (value === undefined || value === null) return ''
+  if (value === undefined || value === null) return '';
   return String(value)
     .split(/[\\/;,]+/)
     .map((num) => num.trim())
     .filter(Boolean)
-    .map((num) => {
-      const digits = num.replace(/\D/g, '')
-      if (!digits) return ''
-      const country = digits.length > 10 ? digits.slice(0, digits.length - 10) : '1'
-      const local = digits.slice(-10)
-      return `+${country} ${local}`
-    })
+    .map(formatPhone)
     .filter(Boolean)
-    .join(', ')
-}
+    .join(', ');
+};
 
 const ContactSearch = ({ contactData, addAdhocEmail }) => {
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState('');
   const filtered = useMemo(() => {
-    const q = query.toLowerCase()
+    const q = query.toLowerCase();
     return contactData.filter((c) =>
-      Object.values(c).some((val) =>
-        String(val).toLowerCase().includes(q)
-      )
-    )
-  }, [query, contactData])
+      Object.values(c).some((val) => String(val).toLowerCase().includes(q))
+    );
+  }, [query, contactData]);
 
   return (
     <div>
@@ -45,16 +45,12 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
             type="text"
             placeholder="Search contacts..."
             value={query}
-            onChange={e => setQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             className="input"
             style={{ width: '100%', paddingRight: '2.25rem', borderRadius: '6px' }}
           />
           {query && (
-            <button
-              onClick={() => setQuery('')}
-              className="clear-btn"
-              title="Clear search"
-            >
+            <button onClick={() => setQuery('')} className="clear-btn" title="Clear search">
               ✕
             </button>
           )}
@@ -67,7 +63,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 420px))',
             justifyContent: 'start',
-            gap: '1rem'
+            gap: '1rem',
           }}
         >
           {filtered.map((contact, i) => (
@@ -78,10 +74,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
               </p>
               <p style={{ margin: 0 }}>
                 <span className="label">Email:</span>{' '}
-                <a
-                  href={`mailto:${contact.Email}`}
-                  style={{ whiteSpace: 'nowrap' }}
-                >
+                <a href={`mailto:${contact.Email}`} style={{ whiteSpace: 'nowrap' }}>
                   {contact.Email}
                 </a>
               </p>
@@ -95,7 +88,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
                   marginTop: '0.5rem',
                   padding: '0.25rem 0.75rem',
                   borderRadius: '6px',
-                  fontSize: '1rem'
+                  fontSize: '1rem',
                 }}
               >
                 Add to Email List
@@ -107,7 +100,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
         <p style={{ color: 'var(--text-muted)' }}>No matching contacts.</p>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ContactSearch
+export default ContactSearch;

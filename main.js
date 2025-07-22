@@ -1,33 +1,35 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron')
-const path = require('path')
-const fs = require('fs')
-const chokidar = require('chokidar')
-const xlsx = require('xlsx')
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const path = require('path');
+const fs = require('fs');
+const chokidar = require('chokidar');
+const xlsx = require('xlsx');
 
-const basePath = app.isPackaged ? path.dirname(process.execPath) : __dirname
+const basePath = app.isPackaged ? path.dirname(process.execPath) : __dirname;
+const GROUPS_FILE = 'groups.xlsx';
+const CONTACTS_FILE = 'contacts.xlsx';
 
 let win
 let watcher
 let cachedData = { emailData: [], contactData: [] }
 
-function loadExcelFiles() {
+function loadExcelFiles(file) {
   try {
-    const groupsPath = path.join(basePath, 'groups.xlsx')
-    const contactsPath = path.join(basePath, 'contacts.xlsx')
-
-    const groupWorkbook = xlsx.readFile(groupsPath)
-    const contactWorkbook = xlsx.readFile(contactsPath)
-
-    const groupSheet = groupWorkbook.Sheets[groupWorkbook.SheetNames[0]]
-    const contactSheet = contactWorkbook.Sheets[contactWorkbook.SheetNames[0]]
-
-    const emailData = xlsx.utils.sheet_to_json(groupSheet, { header: 1 })
-    const contactData = xlsx.utils.sheet_to_json(contactSheet)
-
-    cachedData = { emailData, contactData }
+    if (file === 'groups' || !file) {
+      const groupsPath = path.join(basePath, GROUPS_FILE);
+      const groupWorkbook = xlsx.readFile(groupsPath);
+      const groupSheet = groupWorkbook.Sheets[groupWorkbook.SheetNames[0]];
+      cachedData.emailData = xlsx.utils.sheet_to_json(groupSheet, { header: 1 });
+    }
+    if (file === 'contacts' || !file) {
+      const contactsPath = path.join(basePath, CONTACTS_FILE);
+      const contactWorkbook = xlsx.readFile(contactsPath);
+      const contactSheet = contactWorkbook.Sheets[contactWorkbook.SheetNames[0]];
+      cachedData.contactData = xlsx.utils.sheet_to_json(contactSheet);
+    }
   } catch (err) {
-    console.error('Error reading Excel files:', err)
-    cachedData = { emailData: [], contactData: [] }
+    console.error(`Error reading ${file || 'Excel'} file:`, err);
+    if (file === 'groups' || !file) cachedData.emailData = [];
+    if (file === 'contacts' || !file) cachedData.contactData = [];
   }
 }
 
@@ -56,30 +58,31 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  createWindow()
-  loadExcelFiles()
+  createWindow();
+  loadExcelFiles();
 
-  const groupsPath = path.join(basePath, 'groups.xlsx')
-  const contactsPath = path.join(basePath, 'contacts.xlsx')
+  const groupsPath = path.join(basePath, GROUPS_FILE);
+  const contactsPath = path.join(basePath, CONTACTS_FILE);
 
   watcher = chokidar.watch([groupsPath, contactsPath], {
     persistent: true,
     ignoreInitial: true,
-  })
+  });
 
   const onChange = (filePath) => {
-    console.log(`File changed: ${filePath}`)
-    loadExcelFiles()
-    win.webContents.send('excel-data-updated', cachedData)
-  }
+    console.log(`File changed: ${filePath}`);
+    const file = filePath.includes('groups') ? 'groups' : 'contacts';
+    loadExcelFiles(file);
+    win.webContents.send('excel-data-updated', cachedData);
+  };
 
-  watcher.on('change', onChange)
-  watcher.on('add', onChange)
+  watcher.on('change', onChange);
+  watcher.on('add', onChange);
 
   app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
@@ -92,9 +95,8 @@ app.on('will-quit', () => {
 })
 
 ipcMain.on('load-excel-data', (event) => {
-  loadExcelFiles()
-  event.returnValue = cachedData
-})
+  event.returnValue = cachedData;
+});
 
 ipcMain.on('open-excel-file', (event, filename) => {
   const filePath = path.join(basePath, filename)
@@ -105,6 +107,11 @@ ipcMain.on('open-excel-file', (event, filename) => {
 
 ipcMain.handle('open-external-link', async (_event, url) => {
   if (url) {
-    await shell.openExternal(url)
+    await shell.openExternal(url);
   }
-})
+});
+
+ipcMain.handle('check-file-exists', async (_event, filename) => {
+  const filePath = path.join(basePath, filename);
+  return fs.existsSync(filePath);
+});

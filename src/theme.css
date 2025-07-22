@@ -158,6 +158,81 @@ body {
   }
 }
 
+.app-container {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-light);
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.code-display {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.code-display-current {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.code-display-previous {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.logo {
+  width: 200px;
+  margin-bottom: 1rem;
+}
+
+.logo-text {
+  font-family: monospace;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.tabs-container {
+  display: flex;
+  gap: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.tab {
+  cursor: pointer;
+  padding-bottom: 0.25rem;
+  border-bottom: 3px solid transparent;
+  color: var(--text-muted);
+}
+
+.tab.active {
+  border-bottom: 3px solid var(--accent);
+  color: var(--text-light);
+  font-weight: bold;
+}
+
+.refresh-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.last-refreshed {
+  font-size: 0.9rem;
+}
+
 /* Mailto link styling */
 a[href^="mailto:"] {
   color: var(--text-light);
