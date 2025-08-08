@@ -84,34 +84,47 @@ const EmailGroups = ({
 
   return (
     <div>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <button
-          onClick={() => window.nocListAPI?.openFile?.('groups.xlsx')}
-          className="btn btn-secondary"
-        >
-          Open Email Groups Excel
-        </button>
-      </div>
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          background: 'var(--bg-primary)',
+          zIndex: 1,
+          paddingBottom: '1.5rem',
+        }}
+      >
+        <div style={{ marginBottom: '1.5rem' }}>
+          <button
+            onClick={() => window.nocListAPI?.openFile?.('groups.xlsx')}
+            className="btn btn-secondary"
+          >
+            Open Email Groups Excel
+          </button>
+        </div>
 
-      <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}>
-        <div style={{ position: 'relative', flex: '1 1 250px', maxWidth: '300px' }}>
-          <input
-            type="text"
-            placeholder="Search groups..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="input"
-            style={{ width: '100%', paddingRight: '1.75rem' }}
-          />
-          {search && (
-            <button
-              onClick={() => setSearch('')}
-              className="clear-btn"
-              title="Clear search"
-            >
-              ✕
-            </button>
-          )}
+        <div
+          className="stack-on-small"
+          style={{ alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}
+        >
+          <div style={{ position: 'relative', flex: '1 1 250px', maxWidth: '300px' }}>
+            <input
+              type="text"
+              placeholder="Search groups..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="input"
+              style={{ width: '100%', paddingRight: '1.75rem' }}
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="clear-btn"
+                title="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
