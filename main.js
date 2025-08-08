@@ -4,16 +4,27 @@ const fs = require('fs')
 const chokidar = require('chokidar')
 const xlsx = require('xlsx')
 
+// Base directory where Excel files live. In production this is next to the executable.
 const basePath = app.isPackaged ? path.dirname(process.execPath) : __dirname
 
 let win
 let watcher
 let cachedData = { emailData: [], contactData: [] }
 
+/**
+ * Resolve file paths for the Excel spreadsheets.
+ */
+const getExcelPaths = () => ({
+  groupsPath: path.join(basePath, 'groups.xlsx'),
+  contactsPath: path.join(basePath, 'contacts.xlsx'),
+})
+
+/**
+ * Read Excel sheets and cache the parsed data for quick access.
+ */
 function loadExcelFiles() {
   try {
-    const groupsPath = path.join(basePath, 'groups.xlsx')
-    const contactsPath = path.join(basePath, 'contacts.xlsx')
+    const { groupsPath, contactsPath } = getExcelPaths()
 
     const groupWorkbook = xlsx.readFile(groupsPath)
     const contactWorkbook = xlsx.readFile(contactsPath)
@@ -21,16 +32,47 @@ function loadExcelFiles() {
     const groupSheet = groupWorkbook.Sheets[groupWorkbook.SheetNames[0]]
     const contactSheet = contactWorkbook.Sheets[contactWorkbook.SheetNames[0]]
 
-    const emailData = xlsx.utils.sheet_to_json(groupSheet, { header: 1 })
-    const contactData = xlsx.utils.sheet_to_json(contactSheet)
-
-    cachedData = { emailData, contactData }
+    cachedData = {
+      emailData: xlsx.utils.sheet_to_json(groupSheet, { header: 1 }),
+      contactData: xlsx.utils.sheet_to_json(contactSheet),
+    }
   } catch (err) {
     console.error('Error reading Excel files:', err)
     cachedData = { emailData: [], contactData: [] }
   }
 }
 
+/**
+ * Send the latest cached Excel data to the renderer.
+ */
+function sendExcelUpdate() {
+  win.webContents.send('excel-data-updated', cachedData)
+}
+
+/**
+ * Watch Excel files for changes and notify the renderer when updates occur.
+ */
+function watchExcelFiles() {
+  const { groupsPath, contactsPath } = getExcelPaths()
+
+  watcher = chokidar.watch([groupsPath, contactsPath], {
+    persistent: true,
+    ignoreInitial: true,
+  })
+
+  const onChange = (filePath) => {
+    console.log(`File changed: ${filePath}`)
+    loadExcelFiles()
+    sendExcelUpdate()
+  }
+
+  watcher.on('change', onChange)
+  watcher.on('add', onChange)
+}
+
+/**
+ * Create the main browser window.
+ */
 function createWindow() {
   win = new BrowserWindow({
     width: 1000,
@@ -58,23 +100,7 @@ function createWindow() {
 app.whenReady().then(() => {
   createWindow()
   loadExcelFiles()
-
-  const groupsPath = path.join(basePath, 'groups.xlsx')
-  const contactsPath = path.join(basePath, 'contacts.xlsx')
-
-  watcher = chokidar.watch([groupsPath, contactsPath], {
-    persistent: true,
-    ignoreInitial: true,
-  })
-
-  const onChange = (filePath) => {
-    console.log(`File changed: ${filePath}`)
-    loadExcelFiles()
-    win.webContents.send('excel-data-updated', cachedData)
-  }
-
-  watcher.on('change', onChange)
-  watcher.on('add', onChange)
+  watchExcelFiles()
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

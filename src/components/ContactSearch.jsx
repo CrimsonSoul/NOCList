@@ -1,22 +1,12 @@
 import React, { useState, useMemo } from 'react'
+import { formatPhones } from '../utils/formatPhones'
 
-const formatPhones = (value) => {
-  if (value === undefined || value === null) return ''
-  return String(value)
-    .split(/[\\/;,]+/)
-    .map((num) => num.trim())
-    .filter(Boolean)
-    .map((num) => {
-      const digits = num.replace(/\D/g, '')
-      if (!digits) return ''
-      const country = digits.length > 10 ? digits.slice(0, digits.length - 10) : '1'
-      const local = digits.slice(-10)
-      return `+${country} ${local}`
-    })
-    .filter(Boolean)
-    .join(', ')
-}
-
+/**
+ * Provide a searchable list of contacts with quick email adding.
+ * @param {Object} props
+ * @param {Array} props.contactData - Parsed contact rows.
+ * @param {(email: string) => void} props.addAdhocEmail - Callback to add emails.
+ */
 const ContactSearch = ({ contactData, addAdhocEmail }) => {
   const [query, setQuery] = useState('')
   const filtered = useMemo(() => {

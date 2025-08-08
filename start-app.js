@@ -36,7 +36,10 @@ function waitForPort(port, host, timeout = 10000, interval = 500) {
   })
 }
 
-async function start() {
+/**
+ * Launch the Vite dev server and, once ready, start Electron.
+ */
+async function startDev() {
   const vite = spawn('npx', ['vite'], { stdio: 'inherit', shell: true })
 
   try {
@@ -44,7 +47,7 @@ async function start() {
 
     const electron = spawn('npx', ['electron', '.'], {
       stdio: 'inherit',
-      shell: true
+      shell: true,
     })
 
     const shutdown = () => {
@@ -63,5 +66,5 @@ async function start() {
   }
 }
 
-start()
+startDev()
 

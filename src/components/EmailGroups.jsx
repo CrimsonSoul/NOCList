@@ -1,7 +1,22 @@
 import React, { useMemo, useState, useCallback } from 'react'
 import { toast } from 'react-hot-toast'
 
-const EmailGroups = ({ emailData, adhocEmails, selectedGroups, setSelectedGroups, setAdhocEmails }) => {
+/**
+ * Manage selection of email groups and creation of merged mailing lists.
+ * @param {Object} props
+ * @param {Array} props.emailData - Raw group data from Excel.
+ * @param {string[]} props.adhocEmails - Manually added emails.
+ * @param {string[]} props.selectedGroups - Currently selected group names.
+ * @param {Function} props.setSelectedGroups - Setter for group selection.
+ * @param {Function} props.setAdhocEmails - Setter for ad-hoc emails.
+ */
+const EmailGroups = ({
+  emailData,
+  adhocEmails,
+  selectedGroups,
+  setSelectedGroups,
+  setAdhocEmails,
+}) => {
   const [copied, setCopied] = useState(false)
   const [search, setSearch] = useState('')
 
