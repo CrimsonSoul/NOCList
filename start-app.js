@@ -57,7 +57,7 @@ async function start() {
       shutdown()
     })
   } catch (err) {
-    console.error(`❌ Failed to detect Vite dev server: ${err.message}`)
+    console.error('❌ Failed to detect Vite dev server:', err.message)
     vite.kill('SIGINT')
     process.exit(1)
   }
