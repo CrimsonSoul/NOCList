@@ -110,53 +110,63 @@ function App() {
         fontFamily: 'DM Sans, sans-serif',
         background: 'var(--bg-primary)',
         color: 'var(--text-light)',
-        minHeight: '100vh',
         padding: '2rem',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
       }}
     >
       <Toaster position="top-right" toastOptions={toastOptions} />
-      <CodeDisplay currentCode={currentCode} previousCode={previousCode} progressKey={progressKey} />
-      {logoAvailable ? (
-        <img src="logo.png" alt="NOC List Logo" style={{ width: '200px', marginBottom: '1rem' }} />
-      ) : (
-        <pre
-          style={{
-            fontFamily: 'monospace',
-            fontSize: '1rem',
-            marginBottom: '1rem',
-            lineHeight: '1.2',
-          }}
-        >{`    _   ______  ______   __    _      __
+
+      {/* Header section remains fixed */}
+      <div style={{ flex: '0 0 auto' }}>
+        <CodeDisplay currentCode={currentCode} previousCode={previousCode} progressKey={progressKey} />
+        {logoAvailable ? (
+          <img src="logo.png" alt="NOC List Logo" style={{ width: '200px', marginBottom: '1rem' }} />
+        ) : (
+          <pre
+            style={{
+              fontFamily: 'monospace',
+              fontSize: '1rem',
+              marginBottom: '1rem',
+              lineHeight: '1.2',
+            }}
+          >{`    _   ______  ______   __    _      __
    / | / / __ \\/ ____/  / /   (_)____/ /_
   /  |/ / / / / /      / /   / / ___/ __/
  / /|  / /_/ / /___   / /___/ (__  ) /_
 /_/ |_|\\____/\\____/  /_____/_/____/\\__/`}</pre>
-      )}
-      <TabSelector tab={tab} setTab={setTab} />
+        )}
+        <TabSelector tab={tab} setTab={setTab} />
 
-      <div
-        className="stack-on-small"
-        style={{ fontFamily: 'DM Sans, sans-serif', gap: '1rem', marginBottom: '1rem' }}
-      >
-        <button onClick={refreshData} className="btn">
-          Refresh Data
-        </button>
-        <span style={{ alignSelf: 'center', fontSize: '0.9rem' }}>
-          Last Refreshed: {lastRefresh}
-        </span>
+        <div
+          className="stack-on-small"
+          style={{ fontFamily: 'DM Sans, sans-serif', gap: '1rem', marginBottom: '1rem' }}
+        >
+          <button onClick={refreshData} className="btn">
+            Refresh Data
+          </button>
+          <span style={{ alignSelf: 'center', fontSize: '0.9rem' }}>
+            Last Refreshed: {lastRefresh}
+          </span>
+        </div>
       </div>
 
-      {tab === 'email' ? (
-        <EmailGroups
-          emailData={emailData}
-          adhocEmails={adhocEmails}
-          selectedGroups={selectedGroups}
-          setSelectedGroups={setSelectedGroups}
-          setAdhocEmails={setAdhocEmails}
-        />
-      ) : (
-        <ContactSearch contactData={contactData} addAdhocEmail={addAdhocEmail} />
-      )}
+      {/* Scrollable content area */}
+      <div style={{ flex: '1 1 auto', overflowY: 'auto' }}>
+        {tab === 'email' ? (
+          <EmailGroups
+            emailData={emailData}
+            adhocEmails={adhocEmails}
+            selectedGroups={selectedGroups}
+            setSelectedGroups={setSelectedGroups}
+            setAdhocEmails={setAdhocEmails}
+          />
+        ) : (
+          <ContactSearch contactData={contactData} addAdhocEmail={addAdhocEmail} />
+        )}
+      </div>
     </div>
   )
 }
