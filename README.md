@@ -1,12 +1,12 @@
 # NOC List
 
 ```
-    _   ______  ______   __    _      __ 
+    _   ______  ______   __    _      __
    / | / / __ \/ ____/  / /   (_)____/ /_
   /  |/ / / / / /      / /   / / ___/ __/
- / /|  / /_/ / /___   / /___/ (__  ) /_  
-/_/ |_/\____/\____/  /_____/_/____/\__/  
-                                         
+ / /|  / /_/ / /___   / /___/ (__  ) /_
+/_/ |_/\____/\____/  /_____/_/____/\__/
+
 ```
 
 This project is a minimal React + Electron application for managing contacts and email groups.
@@ -57,4 +57,3 @@ application icon.
 
 A GitHub Actions workflow builds the Windows package on each push to `main`.
 The resulting `release/NOCList-win32-x64` folder is uploaded as a workflow artifact.
-

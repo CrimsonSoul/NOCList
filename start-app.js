@@ -1,52 +1,72 @@
-const { spawn } = require('child_process')
-const net = require('net')
+const { spawn } = require('child_process');
+const net = require('net');
 
-const vite = spawn('npx', ['vite'], {
-  stdio: 'inherit',
-  shell: true
-})
-
-function waitForPort(port, host, timeout = 10000) {
+/**
+ * Wait until a TCP port becomes available.
+ * @param {Object} options
+ * @param {number} options.port - Port number to check.
+ * @param {string} [options.host='localhost'] - Hostname to connect to.
+ * @param {number} [options.timeout=10000] - Maximum wait time in ms.
+ * @param {number} [options.interval=500] - Retry interval in ms.
+ */
+function waitForPort({
+  port,
+  host = 'localhost',
+  timeout = 10000,
+  interval = 500,
+}) {
   return new Promise((resolve, reject) => {
-    const startTime = Date.now()
-    function check() {
-      const socket = new net.Socket()
-      socket.setTimeout(1000)
+    const endTime = Date.now() + timeout;
+
+    const attempt = () => {
+      const socket = net.createConnection({ port, host });
+
+      const onError = () => {
+        socket.destroy();
+        if (Date.now() > endTime) {
+          reject(new Error(`Timed out waiting for port ${host}:${port}`));
+        } else {
+          setTimeout(attempt, interval);
+        }
+      };
+
+      socket.setTimeout(1000, onError);
+      socket.once('error', onError);
       socket.once('connect', () => {
-        socket.destroy()
-        resolve()
-      })
-      socket.once('timeout', () => {
-        socket.destroy()
-        retry()
-      })
-      socket.once('error', () => {
-        socket.destroy()
-        retry()
-      })
-      socket.connect(port, host)
-    }
-    function retry() {
-      if (Date.now() - startTime > timeout) {
-        reject(new Error('Timed out waiting for port'))
-      } else {
-        setTimeout(check, 500)
-      }
-    }
-    check()
-  })
+        socket.end();
+        resolve();
+      });
+    };
+
+    attempt();
+  });
 }
 
-waitForPort(5173, 'localhost')
-  .then(() => {
+async function start() {
+  const vite = spawn('npx', ['vite'], { stdio: 'inherit', shell: true });
+
+  try {
+    await waitForPort({ port: 5173 });
+
     const electron = spawn('npx', ['electron', '.'], {
       stdio: 'inherit',
-      shell: true
-    })
-    electron.on('close', () => vite.kill('SIGINT'))
-  })
-  .catch(err => {
-    console.error('❌ Failed to detect Vite dev server:', err.message)
-    vite.kill('SIGINT')
-    process.exit(1)
-  })
+      shell: true,
+    });
+
+    const shutdown = () => {
+      if (!vite.killed) vite.kill('SIGINT');
+    };
+
+    electron.on('close', shutdown);
+    process.on('SIGINT', () => {
+      electron.kill('SIGINT');
+      shutdown();
+    });
+  } catch (err) {
+    console.error(`❌ Failed to detect Vite dev server: ${err.message}`);
+    vite.kill('SIGINT');
+    process.exit(1);
+  }
+}
+
+start();

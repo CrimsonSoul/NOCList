@@ -1,32 +1,31 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react';
 
 const formatPhones = (value) => {
-  if (value === undefined || value === null) return ''
+  if (value === undefined || value === null) return '';
   return String(value)
     .split(/[\\/;,]+/)
     .map((num) => num.trim())
     .filter(Boolean)
     .map((num) => {
-      const digits = num.replace(/\D/g, '')
-      if (!digits) return ''
-      const country = digits.length > 10 ? digits.slice(0, digits.length - 10) : '1'
-      const local = digits.slice(-10)
-      return `+${country} ${local}`
+      const digits = num.replace(/\D/g, '');
+      if (!digits) return '';
+      const country =
+        digits.length > 10 ? digits.slice(0, digits.length - 10) : '1';
+      const local = digits.slice(-10);
+      return `+${country} ${local}`;
     })
     .filter(Boolean)
-    .join(', ')
-}
+    .join(', ');
+};
 
 const ContactSearch = ({ contactData, addAdhocEmail }) => {
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState('');
   const filtered = useMemo(() => {
-    const q = query.toLowerCase()
+    const q = query.toLowerCase();
     return contactData.filter((c) =>
-      Object.values(c).some((val) =>
-        String(val).toLowerCase().includes(q)
-      )
-    )
-  }, [query, contactData])
+      Object.values(c).some((val) => String(val).toLowerCase().includes(q))
+    );
+  }, [query, contactData]);
 
   return (
     <div>
@@ -39,15 +38,29 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
           Open Contact List Excel
         </button>
       </div>
-      <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1rem', gap: '0.5rem' }}>
-        <div style={{ position: 'relative', flex: '1 1 250px', minWidth: 0, maxWidth: '300px' }}>
+      <div
+        className="stack-on-small"
+        style={{ alignItems: 'center', marginBottom: '1rem', gap: '0.5rem' }}
+      >
+        <div
+          style={{
+            position: 'relative',
+            flex: '1 1 250px',
+            minWidth: 0,
+            maxWidth: '300px',
+          }}
+        >
           <input
             type="text"
             placeholder="Search contacts..."
             value={query}
-            onChange={e => setQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             className="input"
-            style={{ width: '100%', paddingRight: '2.25rem', borderRadius: '6px' }}
+            style={{
+              width: '100%',
+              paddingRight: '2.25rem',
+              borderRadius: '6px',
+            }}
           />
           {query && (
             <button
@@ -67,7 +80,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 420px))',
             justifyContent: 'start',
-            gap: '1rem'
+            gap: '1rem',
           }}
         >
           {filtered.map((contact, i) => (
@@ -86,7 +99,8 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
                 </a>
               </p>
               <p style={{ margin: 0 }}>
-                <span className="label">Phone:</span> {formatPhones(contact.Phone)}
+                <span className="label">Phone:</span>{' '}
+                {formatPhones(contact.Phone)}
               </p>
               <button
                 onClick={() => addAdhocEmail(contact.Email)}
@@ -95,7 +109,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
                   marginTop: '0.5rem',
                   padding: '0.25rem 0.75rem',
                   borderRadius: '6px',
-                  fontSize: '1rem'
+                  fontSize: '1rem',
                 }}
               >
                 Add to Email List
@@ -107,7 +121,7 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
         <p style={{ color: 'var(--text-muted)' }}>No matching contacts.</p>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ContactSearch
+export default ContactSearch;
