@@ -20,34 +20,49 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
 
   return (
     <div>
-      <div style={{ marginBottom: '1rem' }}>
-        <button
-          onClick={() => window.nocListAPI?.openFile?.('contacts.xlsx')}
-          className="btn btn-secondary open-contact-btn"
-          style={{ borderRadius: '6px' }}
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          background: 'var(--bg-primary)',
+          zIndex: 1,
+          paddingBottom: '1rem',
+        }}
+      >
+        <div style={{ marginBottom: '1rem' }}>
+          <button
+            onClick={() => window.nocListAPI?.openFile?.('contacts.xlsx')}
+            className="btn btn-secondary open-contact-btn"
+            style={{ borderRadius: '6px' }}
+          >
+            Open Contact List Excel
+          </button>
+        </div>
+        <div
+          className="stack-on-small"
+          style={{ alignItems: 'center', marginBottom: '1rem', gap: '0.5rem' }}
         >
-          Open Contact List Excel
-        </button>
-      </div>
-      <div className="stack-on-small" style={{ alignItems: 'center', marginBottom: '1rem', gap: '0.5rem' }}>
-        <div style={{ position: 'relative', flex: '1 1 250px', minWidth: 0, maxWidth: '300px' }}>
-          <input
-            type="text"
-            placeholder="Search contacts..."
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            className="input"
-            style={{ width: '100%', paddingRight: '2.25rem', borderRadius: '6px' }}
-          />
-          {query && (
-            <button
-              onClick={() => setQuery('')}
-              className="clear-btn"
-              title="Clear search"
-            >
-              ✕
-            </button>
-          )}
+          <div
+            style={{ position: 'relative', flex: '1 1 250px', minWidth: 0, maxWidth: '300px' }}
+          >
+            <input
+              type="text"
+              placeholder="Search contacts..."
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              className="input"
+              style={{ width: '100%', paddingRight: '2.25rem', borderRadius: '6px' }}
+            />
+            {query && (
+              <button
+                onClick={() => setQuery('')}
+                className="clear-btn"
+                title="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
