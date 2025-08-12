@@ -11,9 +11,7 @@ import React from 'react'
 const CodeDisplay = ({ currentCode, previousCode, progressKey }) => (
   <div
     style={{
-      position: 'fixed',
-      top: '1rem',
-      right: '1rem',
+      marginLeft: 'auto',
       background: 'var(--bg-secondary)',
       border: '1px solid var(--border-color)',
       borderRadius: '4px',
