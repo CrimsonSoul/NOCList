@@ -119,25 +119,43 @@ function App() {
     >
       <Toaster position="top-right" toastOptions={toastOptions} />
 
-      {/* Header section remains fixed */}
-      <div style={{ flex: '0 0 auto' }}>
-        <CodeDisplay currentCode={currentCode} previousCode={previousCode} progressKey={progressKey} />
-        {logoAvailable ? (
-          <img src="logo.png" alt="NOC List Logo" style={{ width: '200px', marginBottom: '1rem' }} />
-        ) : (
-          <pre
-            style={{
-              fontFamily: 'monospace',
-              fontSize: '1rem',
-              marginBottom: '1rem',
-              lineHeight: '1.2',
-            }}
-          >{`    _   ______  ______   __    _      __
+      {/* Header section stays fixed at the top */}
+      <header
+        style={{
+          flex: '0 0 auto',
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
+          background: 'var(--bg-primary)',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          {logoAvailable ? (
+            <img
+              src="logo.png"
+              alt="NOC List Logo"
+              style={{ width: '200px', marginBottom: '1rem' }}
+            />
+          ) : (
+            <pre
+              style={{
+                fontFamily: 'monospace',
+                fontSize: '1rem',
+                marginBottom: '1rem',
+                lineHeight: '1.2',
+              }}
+            >{`    _   ______  ______   __    _      __
    / | / / __ \\/ ____/  / /   (_)____/ /_
   /  |/ / / / / /      / /   / / ___/ __/
  / /|  / /_/ / /___   / /___/ (__  ) /_
 /_/ |_|\\____/\\____/  /_____/_/____/\\__/`}</pre>
-        )}
+          )}
+          <CodeDisplay
+            currentCode={currentCode}
+            previousCode={previousCode}
+            progressKey={progressKey}
+          />
+        </div>
         <TabSelector tab={tab} setTab={setTab} />
 
         <div
@@ -151,7 +169,7 @@ function App() {
             Last Refreshed: {lastRefresh}
           </span>
         </div>
-      </div>
+      </header>
 
       {/* Scrollable content area */}
       <div style={{ flex: '1 1 auto', overflowY: 'auto' }}>
