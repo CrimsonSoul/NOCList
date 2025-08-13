@@ -9,7 +9,7 @@ describe('App', () => {
       Promise.resolve({ ok: false, json: () => Promise.resolve({}) }),
     )
     window.nocListAPI = {
-      loadExcelData: () => ({ emailData: [], contactData: [] }),
+      loadExcelData: async () => ({ emailData: [], contactData: [] }),
       onExcelDataUpdate: () => () => {},
       onExcelWatchError: () => () => {},
     }
@@ -24,7 +24,7 @@ describe('App', () => {
       Promise.resolve({ ok: true, json: () => Promise.resolve({}) }),
     )
     window.nocListAPI = {
-      loadExcelData: () => ({ emailData: [], contactData: [] }),
+      loadExcelData: async () => ({ emailData: [], contactData: [] }),
       onExcelDataUpdate: () => () => {},
       onExcelWatchError: () => () => {},
     }
@@ -38,7 +38,7 @@ describe('Excel listener cleanup', () => {
     const cleanup = vi.fn()
     const onExcelDataUpdate = vi.fn(() => cleanup)
     window.nocListAPI = {
-      loadExcelData: () => ({ emailData: [], contactData: [] }),
+      loadExcelData: async () => ({ emailData: [], contactData: [] }),
       onExcelDataUpdate,
       onExcelWatchError: () => () => {},
     }

@@ -5,10 +5,10 @@ const { contextBridge, ipcRenderer } = require('electron')
  */
 contextBridge.exposeInMainWorld('nocListAPI', {
   /**
-   * Load Excel data synchronously from the main process.
-   * @returns {{emailData: any[], contactData: any[]}}
+   * Load Excel data asynchronously from the main process.
+   * @returns {Promise<{emailData: any[], contactData: any[]}>}
    */
-  loadExcelData: () => ipcRenderer.sendSync('load-excel-data'),
+  loadExcelData: () => ipcRenderer.invoke('load-excel-data'),
 
   /**
    * Ask the main process to open an Excel file.

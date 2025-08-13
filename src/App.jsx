@@ -20,8 +20,8 @@ function App() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
   /** Load group and contact data from the preloaded Excel files. */
-  const loadData = useCallback(() => {
-    const { emailData, contactData } = window.nocListAPI.loadExcelData()
+  const loadData = useCallback(async () => {
+    const { emailData, contactData } = await window.nocListAPI.loadExcelData()
     setEmailData(emailData)
     setContactData(contactData)
     setLastRefresh(new Date().toLocaleString())
@@ -63,8 +63,8 @@ function App() {
   }, [])
 
   /** Manually refresh Excel data and clear any ad-hoc emails. */
-  const refreshData = useCallback(() => {
-    loadData()
+  const refreshData = useCallback(async () => {
+    await loadData()
     setAdhocEmails([])
     toast.success('Data refreshed')
   }, [loadData])
