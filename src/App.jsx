@@ -3,6 +3,7 @@ import EmailGroups from './components/EmailGroups'
 import ContactSearch from './components/ContactSearch'
 import CodeDisplay from './components/CodeDisplay'
 import TabSelector from './components/TabSelector'
+import WeatherClock from './components/WeatherClock'
 import { Toaster, toast } from 'react-hot-toast'
 import useRotatingCode from './hooks/useRotatingCode'
 
@@ -112,6 +113,7 @@ function App() {
         color: 'var(--text-light)',
         padding: '2rem',
         height: '100vh',
+        boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
@@ -129,7 +131,14 @@ function App() {
           background: 'var(--bg-primary)',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: '1rem',
+          }}
+        >
           {logoAvailable ? (
             <img
               src="logo.png"
@@ -155,6 +164,7 @@ function App() {
             previousCode={previousCode}
             progressKey={progressKey}
           />
+          <WeatherClock />
         </div>
         <TabSelector tab={tab} setTab={setTab} />
 
