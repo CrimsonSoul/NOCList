@@ -134,8 +134,7 @@ function App() {
         <div
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
+            alignItems: 'flex-end',
             gap: '1rem',
           }}
         >
