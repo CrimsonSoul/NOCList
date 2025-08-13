@@ -62,7 +62,9 @@ const WeatherClock = () => {
 
   return (
     <div style={{ textAlign: 'center', lineHeight: '1.2' }}>
-      <div style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>{now.toLocaleTimeString()}</div>
+      <div style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
+        {now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+      </div>
       {weather && (
         <div style={{ fontSize: '0.9rem' }}>
           Bowling Green: {Math.round(weather.temp)}°F {description}

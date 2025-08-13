@@ -170,22 +170,24 @@ a[href^="mailto:"]:hover {
 }
 
 /* Minimal themed scrollbars */
-body {
+* {
   scrollbar-width: thin; /* Firefox */
-  scrollbar-color: var(--accent) var(--bg-primary);
+  scrollbar-color: var(--accent) transparent;
 }
 
-body::-webkit-scrollbar {
-  width: 6px;
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }
 
-body::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+*::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-body::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background-color: var(--accent);
   border-radius: 4px;
+  opacity: 0.5;
 }
 
 /* Progress bar for code timer */
