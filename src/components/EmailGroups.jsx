@@ -25,13 +25,14 @@ const EmailGroups = ({
     const [headers, ...rows] = emailData
     return headers.map((name, i) => ({
       name,
-      emails: rows.map(row => row[i]).filter(Boolean)
+      emails: rows.map(row => row[i]).filter(Boolean),
+      _search: name.toLowerCase(),
     }))
   }, [emailData])
 
   const filteredGroups = useMemo(() => {
     const term = search.toLowerCase()
-    return groups.filter((group) => group.name.toLowerCase().includes(term))
+    return groups.filter((group) => group._search.includes(term))
   }, [groups, search])
 
   const groupMap = useMemo(
