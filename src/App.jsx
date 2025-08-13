@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import EmailGroups from './components/EmailGroups'
 import ContactSearch from './components/ContactSearch'
+import Header from './components/Header'
 import { Toaster, toast } from 'react-hot-toast'
 
 function App() {
@@ -105,31 +106,14 @@ function App() {
   };
 
   return (
-    <div className="fade-in" style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '2rem' }}>
+    <div className="fade-in" style={{ fontFamily: 'DM Sans, sans-serif', background: 'var(--bg-primary)', color: 'var(--text-light)', minHeight: '100vh', padding: '0 2rem 2rem' }}>
       <Toaster position="top-right" toastOptions={toastOptions} />
-      <div style={{ position: 'fixed', top: '1rem', right: '1rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '0.5rem 1rem', textAlign: 'center', fontSize: '0.9rem' }}>
-        <div style={{ fontSize: '1.6rem', fontWeight: 'bold' }}>Code: {currentCode}</div>
-        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Prev: {previousCode || 'N/A'}</div>
-        <div className="progress-container">
-          <div key={progressKey} className="progress-bar" />
-        </div>
-      </div>
-      {logoAvailable ? (
-        <img src="logo.png" alt="NOC List Logo" style={{ width: '200px', marginBottom: '1rem' }} />
-      ) : (
-        <pre style={{
-          fontFamily: 'monospace',
-          fontSize: '1rem',
-          marginBottom: '1rem',
-          lineHeight: '1.2',
-        }}>
-          {`    _   ______  ______   __    _      __
-   / | / / __ \/ ____/  / /   (_)____/ /_
-  /  |/ / / / / /      / /   / / ___/ __/
- / /|  / /_/ / /___   / /___/ (__  ) /_
-/_/ |_|\____/\____/  /_____/_/____/\__/`}
-        </pre>
-      )}
+      <Header
+        currentCode={currentCode}
+        previousCode={previousCode}
+        progressKey={progressKey}
+        logoAvailable={logoAvailable}
+      />
       <div style={{ fontFamily: 'DM Sans, sans-serif', display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
       <div
         className="stack-on-small"
