@@ -61,20 +61,10 @@ const WeatherClock = () => {
   const description = useMemo(() => weatherCodeMap[weather?.code] || '', [weather])
 
   return (
-    <div
-      style={{
-        background: 'var(--bg-secondary)',
-        border: '1px solid var(--border-color)',
-        borderRadius: '4px',
-        padding: '0.5rem 1rem',
-        textAlign: 'center',
-        fontSize: '0.9rem',
-        lineHeight: '1.2',
-      }}
-    >
-      <div>{now.toLocaleTimeString()}</div>
+    <div style={{ textAlign: 'center', lineHeight: '1.2' }}>
+      <div style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>{now.toLocaleTimeString()}</div>
       {weather && (
-        <div>
+        <div style={{ fontSize: '0.9rem' }}>
           Bowling Green: {Math.round(weather.temp)}°F {description}
         </div>
       )}
