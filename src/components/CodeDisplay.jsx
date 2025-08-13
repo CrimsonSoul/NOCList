@@ -11,13 +11,12 @@ import React from 'react'
 const CodeDisplay = ({ currentCode, previousCode, progressKey }) => (
   <div
     style={{
-      marginLeft: 'auto',
       background: 'var(--bg-secondary)',
       border: '1px solid var(--border-color)',
       borderRadius: '4px',
       padding: '0.5rem 1rem',
       textAlign: 'center',
-      fontSize: '0.9rem'
+      fontSize: '0.9rem',
     }}
   >
     <div style={{ fontSize: '1.6rem', fontWeight: 'bold' }}>
