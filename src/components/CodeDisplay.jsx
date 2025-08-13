@@ -10,14 +10,14 @@ import React from 'react'
  * @param {number} props.intervalMs - Duration of code validity in ms.
  */
 const CodeDisplay = ({ currentCode, previousCode, progressKey, intervalMs }) => (
-  <div style={{ textAlign: 'center' }}>
-    <div style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
-      Code: {currentCode}
-    </div>
-    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-      Prev: {previousCode || 'N/A'}
-    </div>
-    <div className="progress-container">
+    <div className="text-center">
+      <div className="large-bold">
+        Code: {currentCode}
+      </div>
+      <div className="small-muted">
+        Prev: {previousCode || 'N/A'}
+      </div>
+      <div className="progress-container">
       <div
         key={progressKey}
         className="progress-bar"

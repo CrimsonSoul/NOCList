@@ -85,41 +85,29 @@ const EmailGroups = ({
 
   return (
     <div>
-      <div
-        style={{
-          position: 'sticky',
-          top: 0,
-          background: 'var(--bg-primary)',
-          zIndex: 1,
-          paddingBottom: '1.5rem',
-        }}
-      >
-        <div style={{ marginBottom: '1.5rem' }}>
-          <button
-            onClick={() => window.nocListAPI?.openFile?.('groups.xlsx')}
-            className="btn btn-secondary"
-          >
-            Open Email Groups Excel
-          </button>
-        </div>
+        <div className="sticky-header" style={{ '--sticky-padding': '1.5rem' }}>
+          <div className="mb-1-5">
+            <button
+              onClick={() => window.nocListAPI?.openFile?.('groups.xlsx')}
+              className="btn btn-secondary"
+            >
+              Open Email Groups Excel
+            </button>
+          </div>
 
-        <div
-          className="stack-on-small"
-          style={{ alignItems: 'center', marginBottom: '1.5rem', gap: '0.5rem' }}
-        >
-          <div style={{ position: 'relative', flex: '1 1 250px', maxWidth: '300px' }}>
-            <input
-              type="text"
-              placeholder="Search groups..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="input"
-              style={{ width: '100%', paddingRight: '1.75rem' }}
-            />
-            {search && (
-              <button
-                onClick={() => setSearch('')}
-                className="clear-btn"
+          <div className="stack-on-small align-center gap-0-5 mb-1-5">
+            <div className="input-wrapper">
+              <input
+                type="text"
+                placeholder="Search groups..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                className="input search-input"
+              />
+              {search && (
+                <button
+                  onClick={() => setSearch('')}
+                  className="clear-btn"
                 title="Clear search"
               >
                 ✕
@@ -129,24 +117,18 @@ const EmailGroups = ({
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
-        {filteredGroups.map(group => (
-          <button
-            key={group.name}
-            onClick={() => toggleSelect(group.name)}
-            className="btn fade-in"
-            style={{
-              background: selectedGroups.includes(group.name)
-                ? 'var(--button-active)'
-                : 'var(--button-bg)',
-              color: 'var(--text-light)'
-            }}
-          >
-            {group.name}
-            <span style={{ marginLeft: '0.25rem', fontSize: '0.8rem', color: 'var(--text-light)' }}>
-              ({group.emails.length})
-            </span>
-          </button>
+        <div className="flex-wrap gap-0-5 mb-1-5">
+          {filteredGroups.map(group => (
+            <button
+              key={group.name}
+              onClick={() => toggleSelect(group.name)}
+              className={`btn fade-in ${selectedGroups.includes(group.name) ? 'active' : ''}`}
+            >
+              {group.name}
+              <span style={{ marginLeft: '0.25rem', fontSize: '0.8rem', color: 'var(--text-light)' }}>
+                ({group.emails.length})
+              </span>
+            </button>
         ))}
         {(selectedGroups.length > 0 || adhocEmails.length > 0) && (
           <button onClick={clearAll} className="btn btn-secondary fade-in">
@@ -157,24 +139,24 @@ const EmailGroups = ({
 
       {mergedEmails.length > 0 && (
         <>
-          <div style={{ marginBottom: '0.5rem', display: 'flex', gap: '0.5rem' }}>
-            <button onClick={copyToClipboard} className="btn fade-in">
-              Copy Email List
-            </button>
-            <button onClick={launchTeams} className="btn btn-secondary fade-in">
-              Start Teams Meeting
-            </button>
-            {copied && <span style={{ color: 'lightgreen', alignSelf: 'center' }}>Copied</span>}
-          </div>
-          <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '4px', color: 'var(--text-light)' }}>
-            <strong>Merged Emails:</strong>
-            <div style={{ wordBreak: 'break-word', marginTop: '0.5rem' }}>
-              {mergedEmails.join(', ')}
+            <div className="flex gap-0-5 mb-0-5">
+              <button onClick={copyToClipboard} className="btn fade-in">
+                Copy Email List
+              </button>
+              <button onClick={launchTeams} className="btn btn-secondary fade-in">
+                Start Teams Meeting
+              </button>
+              {copied && <span className="self-center" style={{ color: 'lightgreen' }}>Copied</span>}
             </div>
-          </div>
-        </>
-      )}
-    </div>
+            <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '4px', color: 'var(--text-light)' }}>
+              <strong>Merged Emails:</strong>
+              <div className="break-word mt-0-5">
+                {mergedEmails.join(', ')}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
   )
 }
 

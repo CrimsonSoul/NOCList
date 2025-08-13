@@ -26,38 +26,24 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
 
   return (
     <div>
-      <div
-        style={{
-          position: 'sticky',
-          top: 0,
-          background: 'var(--bg-primary)',
-          zIndex: 1,
-          paddingBottom: '1rem',
-        }}
-      >
-        <div style={{ marginBottom: '1rem' }}>
+      <div className="sticky-header">
+        <div className="mb-1">
           <button
             onClick={() => window.nocListAPI?.openFile?.('contacts.xlsx')}
-            className="btn btn-secondary open-contact-btn"
-            style={{ borderRadius: '6px' }}
+            className="btn btn-secondary open-contact-btn rounded-6"
           >
             Open Contact List Excel
           </button>
         </div>
-        <div
-          className="stack-on-small"
-          style={{ alignItems: 'center', marginBottom: '1rem', gap: '0.5rem' }}
-        >
-          <div
-            style={{ position: 'relative', flex: '1 1 250px', minWidth: 0, maxWidth: '300px' }}
-          >
+        <div className="stack-on-small align-center gap-0-5 mb-1">
+          <div className="input-wrapper">
             <input
               type="text"
               placeholder="Search contacts..."
               value={query}
               onChange={e => setQuery(e.target.value)}
-              className="input"
-              style={{ width: '100%', paddingRight: '2.25rem', borderRadius: '6px' }}
+              className="input rounded-6 search-input"
+              style={{ '--clear-btn-space': '2.25rem' }}
             />
             {query && (
               <button
@@ -83,41 +69,35 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
         >
           {filtered.map((contact) => (
             <div key={contact.Email} className="contact-card">
-              <strong>{contact.Name}</strong>
-              <p style={{ margin: '0.5rem 0 0 0' }}>
-                <span className="label">Title:</span> {contact.Title}
-              </p>
-              <p style={{ margin: 0 }}>
-                <span className="label">Email:</span>{' '}
-                <a
-                  href={`mailto:${contact.Email}`}
-                  style={{ whiteSpace: 'nowrap' }}
-                >
-                  {contact.Email}
-                </a>
-              </p>
-              <p style={{ margin: 0 }}>
-                <span className="label">Phone:</span> {formatPhones(contact.Phone)}
-              </p>
-              <button
-                onClick={() => addAdhocEmail(contact.Email)}
-                className="btn"
-                style={{
-                  marginTop: '0.5rem',
-                  padding: '0.25rem 0.75rem',
-                  borderRadius: '6px',
-                  fontSize: '1rem'
-                }}
+            <strong>{contact.Name}</strong>
+            <p className="m-0 mt-0-5">
+              <span className="label">Title:</span> {contact.Title}
+            </p>
+            <p className="m-0">
+              <span className="label">Email:</span>{' '}
+              <a
+                href={`mailto:${contact.Email}`}
+                style={{ whiteSpace: 'nowrap' }}
               >
-                Add to Email List
-              </button>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p style={{ color: 'var(--text-muted)' }}>No matching contacts.</p>
-      )}
-    </div>
+                {contact.Email}
+              </a>
+            </p>
+            <p className="m-0">
+              <span className="label">Phone:</span> {formatPhones(contact.Phone)}
+            </p>
+            <button
+              onClick={() => addAdhocEmail(contact.Email)}
+              className="btn btn-small rounded-6 mt-0-5"
+            >
+              Add to Email List
+            </button>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p className="text-muted">No matching contacts.</p>
+    )}
+  </div>
   )
 }
 

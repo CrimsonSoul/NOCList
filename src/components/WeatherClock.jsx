@@ -87,22 +87,22 @@ const WeatherClock = () => {
 
   const description = useMemo(() => weatherCodeMap[weather?.code] || '', [weather])
 
-  return (
-    <div style={{ textAlign: 'center', lineHeight: '1.2' }}>
-      <div style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
-        {now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+    return (
+      <div className="text-center line-tight">
+        <div className="large-bold">
+          {now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+        </div>
+        {weather && (
+          <div className="small-text">
+            Bowling Green: {Math.round(weather.temp)}°F {description}
+          </div>
+        )}
+        {error && (
+          <div className="small-muted">
+            Weather unavailable
+          </div>
+        )}
       </div>
-      {weather && (
-        <div style={{ fontSize: '0.9rem' }}>
-          Bowling Green: {Math.round(weather.temp)}°F {description}
-        </div>
-      )}
-      {error && (
-        <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-          Weather unavailable
-        </div>
-      )}
-    </div>
   )
 }
 
