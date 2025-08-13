@@ -34,24 +34,34 @@ const getExcelPaths = () => ({
 
 /**
  * Read Excel sheets and cache the parsed data for quick access.
+ *
+ * @param {string} [changedFilePath] - optional full path to a specific Excel
+ *   file that has changed. If provided, only that file is re-read and merged
+ *   into the cached data.
  */
-function loadExcelFiles() {
+function loadExcelFiles(changedFilePath) {
+  const { groupsPath, contactsPath } = getExcelPaths()
+
   try {
-    const { groupsPath, contactsPath } = getExcelPaths()
-
-    const groupWorkbook = xlsx.readFile(groupsPath)
-    const contactWorkbook = xlsx.readFile(contactsPath)
-
-    const groupSheet = groupWorkbook.Sheets[groupWorkbook.SheetNames[0]]
-    const contactSheet = contactWorkbook.Sheets[contactWorkbook.SheetNames[0]]
-
-    cachedData = {
-      emailData: xlsx.utils.sheet_to_json(groupSheet, { header: 1 }),
-      contactData: xlsx.utils.sheet_to_json(contactSheet),
+    if (!changedFilePath || changedFilePath === groupsPath) {
+      const groupWorkbook = xlsx.readFile(groupsPath)
+      const groupSheet = groupWorkbook.Sheets[groupWorkbook.SheetNames[0]]
+      cachedData.emailData = xlsx.utils.sheet_to_json(groupSheet, { header: 1 })
     }
   } catch (err) {
-    console.error('Error reading Excel files:', err)
-    cachedData = { emailData: [], contactData: [] }
+    console.error('Error reading groups file:', err)
+    cachedData.emailData = []
+  }
+
+  try {
+    if (!changedFilePath || changedFilePath === contactsPath) {
+      const contactWorkbook = xlsx.readFile(contactsPath)
+      const contactSheet = contactWorkbook.Sheets[contactWorkbook.SheetNames[0]]
+      cachedData.contactData = xlsx.utils.sheet_to_json(contactSheet)
+    }
+  } catch (err) {
+    console.error('Error reading contacts file:', err)
+    cachedData.contactData = []
   }
 }
 
@@ -75,7 +85,7 @@ function watchExcelFiles(testWatcher) {
 
   const debouncedOnChange = debounce((filePath) => {
     console.log(`File changed: ${filePath}`)
-    loadExcelFiles()
+    loadExcelFiles(filePath)
     sendExcelUpdate()
   }, DEBOUNCE_DELAY)
 
@@ -164,6 +174,7 @@ if (process.env.NODE_ENV !== 'test') {
 
 module.exports = {
   watchExcelFiles,
+  loadExcelFiles,
   __setWin: (w) => (win = w),
   __setCachedData: (data) => (cachedData = data),
   getCachedData: () => cachedData,
