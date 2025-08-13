@@ -75,8 +75,8 @@ const ContactSearch = ({ contactData, addAdhocEmail }) => {
             gap: '1rem'
           }}
         >
-          {filtered.map((contact, i) => (
-            <div key={i} className="contact-card">
+          {filtered.map((contact) => (
+            <div key={contact.Email} className="contact-card">
               <strong>{contact.Name}</strong>
               <p style={{ margin: '0.5rem 0 0 0' }}>
                 <span className="label">Title:</span> {contact.Title}

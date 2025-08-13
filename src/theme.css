@@ -207,7 +207,7 @@ a[href^="mailto:"]:hover {
   left: 0;
   height: 100%;
   background: var(--accent);
-  animation: code-progress 300s linear forwards;
+  animation: code-progress var(--duration, 300s) linear forwards;
 }
 
 @keyframes code-progress {

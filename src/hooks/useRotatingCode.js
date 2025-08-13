@@ -34,7 +34,7 @@ const useRotatingCode = (intervalMs = 5 * 60 * 1000) => {
     return () => clearInterval(interval)
   }, [generateCode, intervalMs])
 
-  return { currentCode, previousCode, progressKey }
+  return { currentCode, previousCode, progressKey, intervalMs }
 }
 
 export default useRotatingCode

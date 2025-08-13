@@ -42,29 +42,57 @@ function waitForPort(port, host, timeout = 10000, interval = 500) {
 async function startDev() {
   const vite = spawn('npx', ['vite'], { stdio: 'inherit', shell: true })
 
+  const cleanup = () => {
+    if (!vite.killed) vite.kill('SIGINT')
+    if (electron && !electron.killed) electron.kill('SIGINT')
+  }
+
+  let electron
+
+  vite.on('error', (err) => {
+    console.error('Vite process error:', err)
+    cleanup()
+    process.exit(1)
+  })
+
   try {
     await waitForPort(5173, 'localhost')
 
-    const electron = spawn('npx', ['electron', '.'], {
+    electron = spawn('npx', ['electron', '.'], {
       stdio: 'inherit',
       shell: true,
     })
 
-    const shutdown = () => {
-      if (!vite.killed) vite.kill('SIGINT')
-    }
+    electron.on('error', (err) => {
+      console.error('Electron process error:', err)
+      cleanup()
+      process.exit(1)
+    })
 
-    electron.on('close', shutdown)
+    electron.on('close', () => {
+      cleanup()
+      process.exit(0)
+    })
+
+    vite.on('close', () => {
+      cleanup()
+      process.exit(0)
+    })
+
     process.on('SIGINT', () => {
-      electron.kill('SIGINT')
-      shutdown()
+      cleanup()
+      process.exit(0)
     })
   } catch (err) {
     console.error('❌ Failed to detect Vite dev server:', err.message)
-    vite.kill('SIGINT')
+    cleanup()
     process.exit(1)
   }
 }
 
-startDev()
+if (require.main === module) {
+  startDev()
+}
+
+module.exports = { startDev }
 

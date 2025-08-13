@@ -66,8 +66,23 @@ function watchExcelFiles() {
     sendExcelUpdate()
   }
 
+  const onUnlink = (filePath) => {
+    console.log(`File deleted: ${filePath}`)
+    cachedData = { emailData: [], contactData: [] }
+    sendExcelUpdate()
+  }
+
+  const onError = (error) => {
+    console.error('Watcher error:', error)
+    if (win?.webContents) {
+      win.webContents.send('excel-watch-error', error.message || String(error))
+    }
+  }
+
   watcher.on('change', onChange)
   watcher.on('add', onChange)
+  watcher.on('unlink', onUnlink)
+  watcher.on('error', onError)
 }
 
 /**
@@ -97,40 +112,49 @@ function createWindow() {
   })
 }
 
-app.whenReady().then(() => {
-  createWindow()
-  loadExcelFiles()
-  watchExcelFiles()
+if (process.env.NODE_ENV !== 'test') {
+  app.whenReady().then(() => {
+    createWindow()
+    loadExcelFiles()
+    watchExcelFiles()
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    })
   })
-})
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
-})
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit()
+  })
 
-app.on('will-quit', () => {
-  if (watcher) {
-    watcher.close()
-  }
-})
+  app.on('will-quit', () => {
+    if (watcher) {
+      watcher.close()
+    }
+  })
 
-ipcMain.on('load-excel-data', (event) => {
-  loadExcelFiles()
-  event.returnValue = cachedData
-})
+  ipcMain.on('load-excel-data', (event) => {
+    loadExcelFiles()
+    event.returnValue = cachedData
+  })
 
-ipcMain.on('open-excel-file', (event, filename) => {
-  const filePath = path.join(basePath, filename)
-  if (fs.existsSync(filePath)) {
-    shell.openPath(filePath)
-  }
-})
+  ipcMain.on('open-excel-file', (event, filename) => {
+    const filePath = path.join(basePath, filename)
+    if (fs.existsSync(filePath)) {
+      shell.openPath(filePath)
+    }
+  })
 
-ipcMain.handle('open-external-link', async (_event, url) => {
-  if (url) {
-    await shell.openExternal(url)
-  }
-})
+  ipcMain.handle('open-external-link', async (_event, url) => {
+    if (url) {
+      await shell.openExternal(url)
+    }
+  })
+}
+
+module.exports = {
+  watchExcelFiles,
+  __setWin: (w) => (win = w),
+  __setCachedData: (data) => (cachedData = data),
+  getCachedData: () => cachedData,
+}

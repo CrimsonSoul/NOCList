@@ -7,8 +7,9 @@ import React from 'react'
  * @param {string} props.currentCode
  * @param {string} props.previousCode
  * @param {number} props.progressKey - Forces animation restart when code updates.
+ * @param {number} props.intervalMs - Duration of code validity in ms.
  */
-const CodeDisplay = ({ currentCode, previousCode, progressKey }) => (
+const CodeDisplay = ({ currentCode, previousCode, progressKey, intervalMs }) => (
   <div style={{ textAlign: 'center' }}>
     <div style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
       Code: {currentCode}
@@ -17,7 +18,11 @@ const CodeDisplay = ({ currentCode, previousCode, progressKey }) => (
       Prev: {previousCode || 'N/A'}
     </div>
     <div className="progress-container">
-      <div key={progressKey} className="progress-bar" />
+      <div
+        key={progressKey}
+        className="progress-bar"
+        style={{ '--duration': `${intervalMs}ms` }}
+      />
     </div>
   </div>
 )
