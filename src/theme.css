@@ -208,63 +208,11 @@ body::-webkit-scrollbar-thumb {
   animation: code-progress 300s linear forwards;
 }
 
-  @keyframes code-progress {
-    from {
-      width: 0%;
-    }
-    to {
-      width: 100%;
-    }
+@keyframes code-progress {
+  from {
+    width: 0%;
   }
-
-  /* Header styling */
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem 2rem;
+  to {
+    width: 100%;
   }
-
-  .header-logo {
-    height: 60px;
-  }
-
-  .header-logo-ascii {
-    font-family: monospace;
-    font-size: 1rem;
-    line-height: 1.2;
-    white-space: pre;
-  }
-
-  .header-info {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    color: var(--text-light);
-  }
-
-  .code-box {
-    text-align: center;
-  }
-
-  .code-box .code {
-    font-size: 1.6rem;
-    font-weight: bold;
-  }
-
-  .code-box .prev-code {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-  }
-
-  .clock-weather {
-    text-align: right;
-    font-size: 0.9rem;
-  }
-
-  .clock-weather .weather {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-  }
+}
