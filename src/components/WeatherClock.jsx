@@ -92,6 +92,9 @@ const WeatherClock = () => {
         <div className="large-bold">
           {now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
         </div>
+        <div className="small-text">
+          {now.toLocaleDateString()}
+        </div>
         {weather && (
           <div className="small-text">
             Bowling Green: {Math.round(weather.temp)}°F {description}

@@ -34,20 +34,20 @@ body {
   font-weight: 600;
   font-size: 1.1rem;
   font-family: 'DM Sans', sans-serif;
-  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn:hover {
   background: var(--button-hover);
   color: var(--button-text);
-  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .btn:active,
 .btn.active {
   background: var(--button-active);
-  transform: translateY(0);
   color: var(--button-text);
+  box-shadow: none;
 }
 
 .btn-secondary {
