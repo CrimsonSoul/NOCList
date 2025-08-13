@@ -11,6 +11,19 @@ let win
 let watcher
 let cachedData = { emailData: [], contactData: [] }
 
+const DEBOUNCE_DELAY = 250
+
+/**
+ * Simple debounce helper to limit how often a function can run.
+ */
+function debounce(fn, delay) {
+  let timer
+  return (...args) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => fn(...args), delay)
+  }
+}
+
 /**
  * Resolve file paths for the Excel spreadsheets.
  */
@@ -52,25 +65,25 @@ function sendExcelUpdate() {
 /**
  * Watch Excel files for changes and notify the renderer when updates occur.
  */
-function watchExcelFiles() {
+function watchExcelFiles(testWatcher) {
   const { groupsPath, contactsPath } = getExcelPaths()
 
-  watcher = chokidar.watch([groupsPath, contactsPath], {
+  watcher = testWatcher || chokidar.watch([groupsPath, contactsPath], {
     persistent: true,
     ignoreInitial: true,
   })
 
-  const onChange = (filePath) => {
+  const debouncedOnChange = debounce((filePath) => {
     console.log(`File changed: ${filePath}`)
     loadExcelFiles()
     sendExcelUpdate()
-  }
+  }, DEBOUNCE_DELAY)
 
-  const onUnlink = (filePath) => {
+  const debouncedOnUnlink = debounce((filePath) => {
     console.log(`File deleted: ${filePath}`)
     cachedData = { emailData: [], contactData: [] }
     sendExcelUpdate()
-  }
+  }, DEBOUNCE_DELAY)
 
   const onError = (error) => {
     console.error('Watcher error:', error)
@@ -79,9 +92,9 @@ function watchExcelFiles() {
     }
   }
 
-  watcher.on('change', onChange)
-  watcher.on('add', onChange)
-  watcher.on('unlink', onUnlink)
+  watcher.on('change', debouncedOnChange)
+  watcher.on('add', debouncedOnChange)
+  watcher.on('unlink', debouncedOnUnlink)
   watcher.on('error', onError)
 }
 
@@ -157,4 +170,5 @@ module.exports = {
   __setWin: (w) => (win = w),
   __setCachedData: (data) => (cachedData = data),
   getCachedData: () => cachedData,
+  __testables: { loadExcelFiles, sendExcelUpdate },
 }
