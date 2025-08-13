@@ -143,15 +143,12 @@ function App() {
           background: 'var(--bg-primary)',
         }}
       >
-        <div
-          className="stack-on-small"
-          style={{ alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}
-        >
-          {logoAvailable ? (
-            <img
-              src="logo.png"
-              alt="NOC List Logo"
-              style={{ width: '200px' }}
+          <div className="stack-on-small align-center gap-1 mb-1">
+            {logoAvailable ? (
+              <img
+                src="logo.png"
+                alt="NOC List Logo"
+                style={{ width: '200px' }}
             />
           ) : (
             <pre
@@ -192,17 +189,14 @@ function App() {
         </div>
         <TabSelector tab={tab} setTab={setTab} />
 
-        <div
-          className="stack-on-small"
-          style={{ fontFamily: 'DM Sans, sans-serif', gap: '1rem', marginBottom: '1rem' }}
-        >
-          <button onClick={refreshData} className="btn">
-            Refresh Data
-          </button>
-          <span style={{ alignSelf: 'center', fontSize: '0.9rem' }}>
-            Last Refreshed: {lastRefresh}
-          </span>
-        </div>
+          <div className="stack-on-small gap-1 mb-1">
+            <button onClick={refreshData} className="btn">
+              Refresh Data
+            </button>
+            <span className="small-text self-center">
+              Last Refreshed: {lastRefresh}
+            </span>
+          </div>
       </header>
 
       {/* Scrollable content area */}
