@@ -9,14 +9,20 @@ import { formatPhones } from '../utils/formatPhones'
  */
 const ContactSearch = ({ contactData, addAdhocEmail }) => {
   const [query, setQuery] = useState('')
+
+  const indexedContacts = useMemo(
+    () =>
+      contactData.map((c) => ({
+        ...c,
+        _search: Object.values(c).join(' ').toLowerCase(),
+      })),
+    [contactData]
+  )
+
   const filtered = useMemo(() => {
     const q = query.toLowerCase()
-    return contactData.filter((c) =>
-      Object.values(c).some((val) =>
-        String(val).toLowerCase().includes(q)
-      )
-    )
-  }, [query, contactData])
+    return indexedContacts.filter((c) => c._search.includes(q))
+  }, [query, indexedContacts])
 
   return (
     <div>
