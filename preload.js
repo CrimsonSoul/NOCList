@@ -20,12 +20,35 @@ contextBridge.exposeInMainWorld('nocListAPI', {
    * Listen for automatic Excel data updates.
    * @param {(data: {emailData: any[], contactData: any[]}) => void} callback
    */
-  onExcelDataUpdate: (callback) =>
-    ipcRenderer.on('excel-data-updated', (_, data) => callback(data)),
+  onExcelDataUpdate: (callback) => {
+    const handler = (_event, data) => callback(data)
+    ipcRenderer.on('excel-data-updated', handler)
+    return () => ipcRenderer.off('excel-data-updated', handler)
+  },
+
+  /**
+   * Listen for file watcher errors from the main process.
+   * @param {(message: string) => void} callback
+   */
+  onExcelWatchError: (callback) => {
+    const handler = (_event, message) => callback(message)
+    ipcRenderer.on('excel-watch-error', handler)
+    return () => ipcRenderer.off('excel-watch-error', handler)
+  },
 
   /**
    * Open an external URL in the user's default browser.
    * @param {string} url
    */
-  openExternal: (url) => ipcRenderer.invoke('open-external-link', url),
+  openExternal: (url) => {
+    try {
+      const parsed = new URL(url)
+      if (['http:', 'https:'].includes(parsed.protocol)) {
+        return ipcRenderer.invoke('open-external-link', url)
+      }
+    } catch {
+      // fall through to error
+    }
+    console.error(`Blocked external URL: ${url}`)
+  },
 })

@@ -18,12 +18,21 @@ const TabSelector = ({ tab, setTab }) => (
     }}
   >
     {['email', 'contact'].map((t) => (
-      <div
+      <button
         key={t}
+        type="button"
         onClick={() => setTab(t)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            setTab(t)
+          }
+        }}
         style={{
           cursor: 'pointer',
           paddingBottom: '0.25rem',
+          border: 'none',
+          background: 'transparent',
           borderBottom:
             tab === t ? '3px solid var(--accent)' : '3px solid transparent',
           color: tab === t ? 'var(--text-light)' : 'var(--text-muted)',
@@ -31,7 +40,7 @@ const TabSelector = ({ tab, setTab }) => (
         }}
       >
         {t === 'email' ? 'Email Groups' : 'Contact Search'}
-      </div>
+      </button>
     ))}
   </div>
 )

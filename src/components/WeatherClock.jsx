@@ -36,6 +36,7 @@ const weatherCodeMap = {
 const WeatherClock = () => {
   const [now, setNow] = useState(new Date())
   const [weather, setWeather] = useState(null)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000)
@@ -43,19 +44,27 @@ const WeatherClock = () => {
   }, [])
 
   useEffect(() => {
-    fetch(
-      'https://api.open-meteo.com/v1/forecast?latitude=36.99&longitude=-86.44&current_weather=true&temperature_unit=fahrenheit&timezone=auto',
-    )
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchWeather = async () => {
+      try {
+        const res = await fetch(
+          'https://api.open-meteo.com/v1/forecast?latitude=36.99&longitude=-86.44&current_weather=true&temperature_unit=fahrenheit&timezone=auto',
+        )
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const data = await res.json()
         if (data?.current_weather) {
           setWeather({
             temp: data.current_weather.temperature,
             code: data.current_weather.weathercode,
           })
+        } else {
+          throw new Error('Malformed weather data')
         }
-      })
-      .catch(() => {})
+      } catch (err) {
+        console.error('Failed to fetch weather', err)
+        setError(true)
+      }
+    }
+    fetchWeather()
   }, [])
 
   const description = useMemo(() => weatherCodeMap[weather?.code] || '', [weather])
@@ -68,6 +77,11 @@ const WeatherClock = () => {
       {weather && (
         <div style={{ fontSize: '0.9rem' }}>
           Bowling Green: {Math.round(weather.temp)}°F {description}
+        </div>
+      )}
+      {error && (
+        <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+          Weather unavailable
         </div>
       )}
     </div>

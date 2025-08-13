@@ -15,7 +15,7 @@ function App() {
   const [lastRefresh, setLastRefresh] = useState('N/A')
   const [tab, setTab] = useState(() => localStorage.getItem('activeTab') || 'email')
   const [logoAvailable, setLogoAvailable] = useState(false)
-  const { currentCode, previousCode, progressKey } = useRotatingCode()
+  const { currentCode, previousCode, progressKey, intervalMs } = useRotatingCode()
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -40,14 +40,26 @@ function App() {
   }, [])
 
   useEffect(() => {
+    let cleanup
     if (window.nocListAPI?.onExcelDataUpdate) {
-      window.nocListAPI.onExcelDataUpdate((data) => {
+      cleanup = window.nocListAPI.onExcelDataUpdate((data) => {
         toast.success('Excel files updated automatically!')
         setEmailData(data.emailData || [])
         setContactData(data.contactData || [])
         setLastRefresh(new Date().toLocaleString())
       })
     }
+    return () => cleanup && cleanup()
+  }, [])
+
+  useEffect(() => {
+    let cleanup
+    if (window.nocListAPI?.onExcelWatchError) {
+      cleanup = window.nocListAPI.onExcelWatchError((msg) => {
+        toast.error(`Watcher error: ${msg}`)
+      })
+    }
+    return () => cleanup && cleanup()
   }, [])
 
   /** Manually refresh Excel data and clear any ad-hoc emails. */
@@ -173,6 +185,7 @@ function App() {
               currentCode={currentCode}
               previousCode={previousCode}
               progressKey={progressKey}
+              intervalMs={intervalMs}
             />
             <WeatherClock />
           </div>

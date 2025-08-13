@@ -10,7 +10,8 @@ describe('App', () => {
     )
     window.nocListAPI = {
       loadExcelData: () => ({ emailData: [], contactData: [] }),
-      onExcelDataUpdate: () => {},
+      onExcelDataUpdate: () => () => {},
+      onExcelWatchError: () => () => {},
     }
     render(<App />)
     expect(
@@ -24,9 +25,25 @@ describe('App', () => {
     )
     window.nocListAPI = {
       loadExcelData: () => ({ emailData: [], contactData: [] }),
-      onExcelDataUpdate: () => {},
+      onExcelDataUpdate: () => () => {},
+      onExcelWatchError: () => () => {},
     }
     render(<App />)
     expect(await screen.findByAltText('NOC List Logo')).toBeInTheDocument()
+  })
+})
+
+describe('Excel listener cleanup', () => {
+  it('unregisters update listener on unmount', () => {
+    const cleanup = vi.fn()
+    const onExcelDataUpdate = vi.fn(() => cleanup)
+    window.nocListAPI = {
+      loadExcelData: () => ({ emailData: [], contactData: [] }),
+      onExcelDataUpdate,
+      onExcelWatchError: () => () => {},
+    }
+    const { unmount } = render(<App />)
+    unmount()
+    expect(cleanup).toHaveBeenCalled()
   })
 })
