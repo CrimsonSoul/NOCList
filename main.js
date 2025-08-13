@@ -133,10 +133,7 @@ if (process.env.NODE_ENV !== 'test') {
     }
   })
 
-  ipcMain.on('load-excel-data', (event) => {
-    loadExcelFiles()
-    event.returnValue = cachedData
-  })
+  ipcMain.handle('load-excel-data', async () => cachedData)
 
   ipcMain.on('open-excel-file', (event, filename) => {
     const filePath = path.join(basePath, filename)
