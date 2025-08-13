@@ -44,10 +44,15 @@ const WeatherClock = () => {
   }, [])
 
   useEffect(() => {
+    let didRetry = false
+    let retryTimeout
+    let controller = new AbortController()
+
     const fetchWeather = async () => {
       try {
         const res = await fetch(
           'https://api.open-meteo.com/v1/forecast?latitude=36.99&longitude=-86.44&current_weather=true&temperature_unit=fahrenheit&timezone=auto',
+          { signal: controller.signal },
         )
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const data = await res.json()
@@ -60,11 +65,24 @@ const WeatherClock = () => {
           throw new Error('Malformed weather data')
         }
       } catch (err) {
-        console.error('Failed to fetch weather', err)
-        setError(true)
+        if (err.name === 'AbortError') return
+        if (!didRetry) {
+          didRetry = true
+          retryTimeout = setTimeout(() => {
+            controller = new AbortController()
+            fetchWeather()
+          }, 5000)
+        } else {
+          console.error('Failed to fetch weather', err)
+          setError(true)
+        }
       }
     }
     fetchWeather()
+    return () => {
+      controller.abort()
+      clearTimeout(retryTimeout)
+    }
   }, [])
 
   const description = useMemo(() => weatherCodeMap[weather?.code] || '', [weather])
