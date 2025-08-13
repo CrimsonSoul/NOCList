@@ -132,25 +132,22 @@ function App() {
         }}
       >
         <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            gap: '1rem',
-          }}
+          className="stack-on-small"
+          style={{ alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}
         >
           {logoAvailable ? (
             <img
               src="logo.png"
               alt="NOC List Logo"
-              style={{ width: '200px', marginBottom: '1rem' }}
+              style={{ width: '200px' }}
             />
           ) : (
             <pre
               style={{
                 fontFamily: 'monospace',
                 fontSize: '1rem',
-                marginBottom: '1rem',
                 lineHeight: '1.2',
+                margin: 0,
               }}
             >{`    _   ______  ______   __    _      __
    / | / / __ \\/ ____/  / /   (_)____/ /_
