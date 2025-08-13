@@ -5,7 +5,9 @@ import App from './App'
 
 describe('App', () => {
   it('renders heading', () => {
-    global.fetch = vi.fn(() => Promise.resolve({ ok: false }))
+    global.fetch = vi.fn(() =>
+      Promise.resolve({ ok: false, json: () => Promise.resolve({}) }),
+    )
     window.nocListAPI = {
       loadExcelData: () => ({ emailData: [], contactData: [] }),
       onExcelDataUpdate: () => {},
@@ -17,7 +19,9 @@ describe('App', () => {
   })
 
   it('shows image when logo file is available', async () => {
-    global.fetch = vi.fn(() => Promise.resolve({ ok: true }))
+    global.fetch = vi.fn(() =>
+      Promise.resolve({ ok: true, json: () => Promise.resolve({}) }),
+    )
     window.nocListAPI = {
       loadExcelData: () => ({ emailData: [], contactData: [] }),
       onExcelDataUpdate: () => {},
