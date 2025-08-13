@@ -155,12 +155,27 @@ function App() {
  / /|  / /_/ / /___   / /___/ (__  ) /_
 /_/ |_|\\____/\\____/  /_____/_/____/\\__/`}</pre>
           )}
-          <CodeDisplay
-            currentCode={currentCode}
-            previousCode={previousCode}
-            progressKey={progressKey}
-          />
-          <WeatherClock />
+          <div
+            style={{
+              background: 'var(--bg-secondary)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '4px',
+              padding: '0.5rem 1rem',
+              display: 'flex',
+              gap: '2rem',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.9rem',
+              textAlign: 'center',
+            }}
+          >
+            <CodeDisplay
+              currentCode={currentCode}
+              previousCode={previousCode}
+              progressKey={progressKey}
+            />
+            <WeatherClock />
+          </div>
         </div>
         <TabSelector tab={tab} setTab={setTab} />
 

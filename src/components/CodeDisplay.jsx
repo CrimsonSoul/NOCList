@@ -9,20 +9,11 @@ import React from 'react'
  * @param {number} props.progressKey - Forces animation restart when code updates.
  */
 const CodeDisplay = ({ currentCode, previousCode, progressKey }) => (
-  <div
-    style={{
-      background: 'var(--bg-secondary)',
-      border: '1px solid var(--border-color)',
-      borderRadius: '4px',
-      padding: '0.5rem 1rem',
-      textAlign: 'center',
-      fontSize: '0.9rem',
-    }}
-  >
-    <div style={{ fontSize: '1.6rem', fontWeight: 'bold' }}>
+  <div style={{ textAlign: 'center' }}>
+    <div style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
       Code: {currentCode}
     </div>
-    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
       Prev: {previousCode || 'N/A'}
     </div>
     <div className="progress-container">
