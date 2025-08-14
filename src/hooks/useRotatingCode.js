@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
+import crypto from 'crypto'
 
 /**
  * Generate a rotating five digit code that updates on an interval.
+ * Uses Node's crypto.randomInt for stronger randomness.
  * @param {number} intervalMs - Duration in milliseconds before the code rotates.
  * @returns {{currentCode: string, previousCode: string, progressKey: number}}
  */
@@ -12,7 +14,7 @@ const useRotatingCode = (intervalMs = 5 * 60 * 1000) => {
   const codeRef = useRef('')
 
   const generateCode = useCallback(
-    () => Math.floor(10000 + Math.random() * 90000).toString(),
+    () => crypto.randomInt(10000, 100000).toString(),
     []
   )
 
