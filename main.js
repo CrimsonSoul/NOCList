@@ -109,6 +109,24 @@ function watchExcelFiles(testWatcher) {
 }
 
 /**
+ * Validate an external URL and open it if allowed.
+ *
+ * @param {string} url
+ */
+async function safeOpenExternalLink(url) {
+  try {
+    const parsed = new URL(url)
+    if (['http:', 'https:'].includes(parsed.protocol)) {
+      await shell.openExternal(url)
+      return
+    }
+  } catch {
+    // fall through to error
+  }
+  console.error(`Blocked external URL: ${url}`)
+}
+
+/**
  * Create the main browser window.
  */
 function createWindow() {
@@ -166,9 +184,7 @@ if (process.env.NODE_ENV !== 'test') {
   })
 
   ipcMain.handle('open-external-link', async (_event, url) => {
-    if (url) {
-      await shell.openExternal(url)
-    }
+    await safeOpenExternalLink(url)
   })
 }
 
@@ -178,5 +194,5 @@ module.exports = {
   __setWin: (w) => (win = w),
   __setCachedData: (data) => (cachedData = data),
   getCachedData: () => cachedData,
-  __testables: { loadExcelFiles, sendExcelUpdate },
+  __testables: { loadExcelFiles, sendExcelUpdate, safeOpenExternalLink },
 }
