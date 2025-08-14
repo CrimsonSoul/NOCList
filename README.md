@@ -28,6 +28,14 @@ Vitest is used for unit testing. To run the test suite:
 npm test
 ```
 
+## Clean Shutdown Check
+
+To manually verify that background processes terminate properly:
+
+1. Start the app with `npm start`.
+2. Once the window opens, end the process with `Ctrl+C` (SIGINT) or `kill` (SIGTERM).
+3. Confirm the command exits and no Node or Electron processes remain.
+
 ## Custom Logo and Icon
 
 To replace the ASCII logo shown in the app, add a `logo.png` file to the

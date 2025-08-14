@@ -83,6 +83,15 @@ async function startDev() {
       cleanup()
       process.exit(0)
     })
+
+    process.on('SIGTERM', () => {
+      cleanup()
+      process.exit(0)
+    })
+
+    process.on('exit', () => {
+      cleanup()
+    })
   } catch (err) {
     console.error('❌ Failed to detect Vite dev server:', err.message)
     cleanup()
