@@ -64,4 +64,34 @@ describe('incremental Excel loading', () => {
     // Contact data reflects new file
     expect(updated.contactData).toEqual([{ Name: 'Bob', Email: 'bob@example.com' }])
   })
+
+  it('retains cached data when groups file is missing', () => {
+    const initial = getCachedData()
+    fs.unlinkSync(groupsPath)
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+    loadExcelFiles(groupsPath)
+
+    const updated = getCachedData()
+    expect(updated.emailData).toEqual(initial.emailData)
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('groups.xlsx not found')
+    )
+    warnSpy.mockRestore()
+  })
+
+  it('retains cached data when contacts file is missing', () => {
+    const initial = getCachedData()
+    fs.unlinkSync(contactsPath)
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
+    loadExcelFiles(contactsPath)
+
+    const updated = getCachedData()
+    expect(updated.contactData).toEqual(initial.contactData)
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('contacts.xlsx not found')
+    )
+    warnSpy.mockRestore()
+  })
 })
