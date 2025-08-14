@@ -69,6 +69,9 @@ function loadExcelFiles(changedFilePath) {
  * Send the latest cached Excel data to the renderer.
  */
 function sendExcelUpdate() {
+  if (!win || !win.webContents) {
+    return
+  }
   win.webContents.send('excel-data-updated', cachedData)
 }
 
@@ -132,6 +135,7 @@ function createWindow() {
 
   win.once('ready-to-show', () => {
     win.show()
+    sendExcelUpdate()
   })
 }
 
@@ -142,7 +146,13 @@ if (process.env.NODE_ENV !== 'test') {
     watchExcelFiles()
 
     app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) createWindow()
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow()
+        if (!watcher) {
+          loadExcelFiles()
+          watchExcelFiles()
+        }
+      }
     })
   })
 
