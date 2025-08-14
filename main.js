@@ -78,10 +78,23 @@ function sendExcelUpdate() {
 function watchExcelFiles(testWatcher) {
   const { groupsPath, contactsPath } = getExcelPaths()
 
+  // If a watcher already exists, close it before creating a new one
+  if (watcher) {
+    watcher.close()
+  }
+
   watcher = testWatcher || chokidar.watch([groupsPath, contactsPath], {
     persistent: true,
     ignoreInitial: true,
   })
+
+  // Expose a cleanup function so callers/tests can stop watching explicitly
+  const cleanup = () => {
+    if (watcher) {
+      watcher.close()
+      watcher = null
+    }
+  }
 
   const debouncedOnChange = debounce((filePath) => {
     console.log(`File changed: ${filePath}`)
@@ -100,12 +113,16 @@ function watchExcelFiles(testWatcher) {
     if (win?.webContents) {
       win.webContents.send('excel-watch-error', error.message || String(error))
     }
+    // Ensure we don't leave dangling listeners if an error occurs
+    cleanup()
   }
 
   watcher.on('change', debouncedOnChange)
   watcher.on('add', debouncedOnChange)
   watcher.on('unlink', debouncedOnUnlink)
   watcher.on('error', onError)
+
+  return cleanup
 }
 
 /**
