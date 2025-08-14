@@ -79,3 +79,26 @@ describe('watchExcelFiles', () => {
     cleanup()
   })
 })
+
+describe('safeOpenExternalLink', () => {
+  it('allows http and https URLs', async () => {
+    electronStub.shell.openExternal.mockClear()
+
+    await main.__testables.safeOpenExternalLink('https://example.com')
+    await main.__testables.safeOpenExternalLink('http://example.com')
+
+    expect(electronStub.shell.openExternal).toHaveBeenCalledTimes(2)
+  })
+
+  it('blocks other protocols and invalid URLs', async () => {
+    electronStub.shell.openExternal.mockClear()
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    await main.__testables.safeOpenExternalLink('file:///etc/passwd')
+    await main.__testables.safeOpenExternalLink('notaurl')
+
+    expect(electronStub.shell.openExternal).not.toHaveBeenCalled()
+    expect(errorSpy).toHaveBeenCalledTimes(2)
+    errorSpy.mockRestore()
+  })
+})
