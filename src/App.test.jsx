@@ -1,7 +1,20 @@
 import { render, screen } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import '@testing-library/jest-dom/vitest'
 import App from './App'
+
+let originalFetch
+let originalNocListAPI
+
+beforeEach(() => {
+  originalFetch = global.fetch
+  originalNocListAPI = window.nocListAPI
+})
+
+afterEach(() => {
+  global.fetch = originalFetch
+  window.nocListAPI = originalNocListAPI
+})
 
 describe('App', () => {
   it('renders heading', () => {
