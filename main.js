@@ -42,26 +42,32 @@ const getExcelPaths = () => ({
 function loadExcelFiles(changedFilePath) {
   const { groupsPath, contactsPath } = getExcelPaths()
 
-  try {
-    if (!changedFilePath || changedFilePath === groupsPath) {
-      const groupWorkbook = xlsx.readFile(groupsPath)
-      const groupSheet = groupWorkbook.Sheets[groupWorkbook.SheetNames[0]]
-      cachedData.emailData = xlsx.utils.sheet_to_json(groupSheet, { header: 1 })
+  if (!changedFilePath || changedFilePath === groupsPath) {
+    if (fs.existsSync(groupsPath)) {
+      try {
+        const groupWorkbook = xlsx.readFile(groupsPath)
+        const groupSheet = groupWorkbook.Sheets[groupWorkbook.SheetNames[0]]
+        cachedData.emailData = xlsx.utils.sheet_to_json(groupSheet, { header: 1 })
+      } catch (err) {
+        console.error('Error reading groups file:', err)
+      }
+    } else {
+      console.warn('groups.xlsx not found; using cached group data')
     }
-  } catch (err) {
-    console.error('Error reading groups file:', err)
-    cachedData.emailData = []
   }
 
-  try {
-    if (!changedFilePath || changedFilePath === contactsPath) {
-      const contactWorkbook = xlsx.readFile(contactsPath)
-      const contactSheet = contactWorkbook.Sheets[contactWorkbook.SheetNames[0]]
-      cachedData.contactData = xlsx.utils.sheet_to_json(contactSheet)
+  if (!changedFilePath || changedFilePath === contactsPath) {
+    if (fs.existsSync(contactsPath)) {
+      try {
+        const contactWorkbook = xlsx.readFile(contactsPath)
+        const contactSheet = contactWorkbook.Sheets[contactWorkbook.SheetNames[0]]
+        cachedData.contactData = xlsx.utils.sheet_to_json(contactSheet)
+      } catch (err) {
+        console.error('Error reading contacts file:', err)
+      }
+    } else {
+      console.warn('contacts.xlsx not found; using cached contact data')
     }
-  } catch (err) {
-    console.error('Error reading contacts file:', err)
-    cachedData.contactData = []
   }
 }
 
