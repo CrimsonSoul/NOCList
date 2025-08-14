@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
 /**
@@ -19,6 +19,7 @@ const EmailGroups = ({
 }) => {
   const [copied, setCopied] = useState(false)
   const [search, setSearch] = useState('')
+  const timeoutRef = useRef(null)
 
   const groups = useMemo(() => {
     if (emailData.length === 0) return []
@@ -64,12 +65,26 @@ const EmailGroups = ({
     try {
       await navigator.clipboard.writeText(mergedEmails.join(', '))
       setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+      timeoutRef.current = setTimeout(() => {
+        setCopied(false)
+        timeoutRef.current = null
+      }, 2000)
       toast.success('Email list copied to clipboard')
     } catch {
       toast.error('Failed to copy')
     }
   }, [mergedEmails])
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
   const launchTeams = useCallback(() => {
     if (mergedEmails.length === 0) return
