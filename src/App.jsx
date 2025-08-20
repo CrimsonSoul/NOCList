@@ -204,7 +204,7 @@ function App() {
 
       {/* Scrollable content area */}
       <div style={{ flex: '1 1 auto', overflowY: 'auto' }}>
-        {tab === 'email' && (
+        {tab === 'email' ? (
           <EmailGroups
             emailData={emailData}
             adhocEmails={adhocEmails}
@@ -212,10 +212,9 @@ function App() {
             setSelectedGroups={setSelectedGroups}
             setAdhocEmails={setAdhocEmails}
           />
-        )}
-        {tab === 'contact' && (
+        ) : tab === 'contact' ? (
           <ContactSearch contactData={contactData} addAdhocEmail={addAdhocEmail} />
-        )}
+        ) : null}
         <div style={{ display: tab === 'radar' ? 'block' : 'none', height: '100%' }}>
           <DispatcherRadar />
         </div>
