@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent, cleanup } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import '@testing-library/jest-dom/vitest'
 import App from './App'
@@ -14,6 +14,7 @@ beforeEach(() => {
 afterEach(() => {
   global.fetch = originalFetch
   window.nocListAPI = originalNocListAPI
+  cleanup()
 })
 
 describe('App', () => {
@@ -43,6 +44,28 @@ describe('App', () => {
     }
     render(<App />)
     expect(await screen.findByAltText('NOC List Logo')).toBeInTheDocument()
+  })
+
+  it('preserves Dispatcher Radar iframe across tab switches', async () => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({ ok: false, json: () => Promise.resolve({}) }),
+    )
+    window.nocListAPI = {
+      loadExcelData: async () => ({ emailData: [], contactData: [] }),
+      onExcelDataUpdate: () => () => {},
+      onExcelWatchError: () => () => {},
+    }
+    render(<App />)
+
+    const radarButton = screen.getByRole('button', { name: 'Dispatcher Radar' })
+    fireEvent.click(radarButton)
+    const iframe = screen.getByTitle('Dispatcher Radar')
+
+    const emailButton = screen.getByRole('button', { name: 'Email Groups' })
+    fireEvent.click(emailButton)
+    fireEvent.click(radarButton)
+
+    expect(screen.getByTitle('Dispatcher Radar')).toBe(iframe)
   })
 })
 

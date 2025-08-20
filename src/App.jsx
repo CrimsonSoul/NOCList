@@ -4,6 +4,7 @@ import ContactSearch from './components/ContactSearch'
 import CodeDisplay from './components/CodeDisplay'
 import TabSelector from './components/TabSelector'
 import WeatherClock from './components/WeatherClock'
+import DispatcherRadar from './components/DispatcherRadar'
 import { Toaster, toast } from 'react-hot-toast'
 import useRotatingCode from './hooks/useRotatingCode'
 
@@ -201,7 +202,7 @@ function App() {
 
       {/* Scrollable content area */}
       <div style={{ flex: '1 1 auto', overflowY: 'auto' }}>
-        {tab === 'email' ? (
+        {tab === 'email' && (
           <EmailGroups
             emailData={emailData}
             adhocEmails={adhocEmails}
@@ -209,9 +210,13 @@ function App() {
             setSelectedGroups={setSelectedGroups}
             setAdhocEmails={setAdhocEmails}
           />
-        ) : (
+        )}
+        {tab === 'contact' && (
           <ContactSearch contactData={contactData} addAdhocEmail={addAdhocEmail} />
         )}
+        <div style={{ display: tab === 'radar' ? 'block' : 'none', height: '100%' }}>
+          <DispatcherRadar />
+        </div>
       </div>
     </div>
   )
