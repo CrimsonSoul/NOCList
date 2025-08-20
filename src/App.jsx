@@ -16,6 +16,7 @@ function App() {
   const [lastRefresh, setLastRefresh] = useState('N/A')
   const [tab, setTab] = useState(() => localStorage.getItem('activeTab') || 'email')
   const [logoAvailable, setLogoAvailable] = useState(false)
+  const [radarMounted, setRadarMounted] = useState(tab === 'radar')
   const { currentCode, previousCode, progressKey, intervalMs } = useRotatingCode()
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -87,6 +88,10 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem('activeTab', tab)
+  }, [tab])
+
+  useEffect(() => {
+    if (tab === 'radar') setRadarMounted(true)
   }, [tab])
 
   const toastOptions = useMemo(
@@ -190,6 +195,7 @@ function App() {
         </div>
         <TabSelector tab={tab} setTab={setTab} />
 
+        {tab !== 'radar' && (
           <div className="stack-on-small gap-1 mb-1">
             <button onClick={refreshData} className="btn">
               Refresh Data
@@ -198,11 +204,12 @@ function App() {
               Last Refreshed: {lastRefresh}
             </span>
           </div>
+        )}
       </header>
 
       {/* Scrollable content area */}
       <div style={{ flex: '1 1 auto', overflowY: 'auto' }}>
-        {tab === 'email' ? (
+        {tab === 'email' && (
           <EmailGroups
             emailData={emailData}
             adhocEmails={adhocEmails}
@@ -210,10 +217,14 @@ function App() {
             setSelectedGroups={setSelectedGroups}
             setAdhocEmails={setAdhocEmails}
           />
-        ) : tab === 'contact' ? (
+        )}
+        {tab === 'contact' && (
           <ContactSearch contactData={contactData} addAdhocEmail={addAdhocEmail} />
-        ) : (
-          <DispatcherRadar />
+        )}
+        {radarMounted && (
+          <div style={{ display: tab === 'radar' ? 'block' : 'none', height: '100%' }}>
+            <DispatcherRadar />
+          </div>
         )}
       </div>
     </div>
