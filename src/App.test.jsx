@@ -67,6 +67,30 @@ describe('App', () => {
 
     expect(screen.getByTitle('Dispatcher Radar')).toBe(iframe)
   })
+
+  it('hides refresh controls on Dispatcher Radar tab', () => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({ ok: false, json: () => Promise.resolve({}) }),
+    )
+    window.nocListAPI = {
+      loadExcelData: async () => ({ emailData: [], contactData: [] }),
+      onExcelDataUpdate: () => () => {},
+      onExcelWatchError: () => () => {},
+    }
+    render(<App />)
+
+    const radarButton = screen.getByRole('button', { name: 'Dispatcher Radar' })
+    fireEvent.click(radarButton)
+
+    expect(screen.queryByRole('button', { name: 'Refresh Data' })).toBeNull()
+    expect(screen.queryByText(/Last Refreshed/)).toBeNull()
+
+    const emailButton = screen.getByRole('button', { name: 'Email Groups' })
+    fireEvent.click(emailButton)
+
+    expect(screen.getByRole('button', { name: 'Refresh Data' })).toBeInTheDocument()
+    expect(screen.getByText(/Last Refreshed/)).toBeInTheDocument()
+  })
 })
 
 describe('Excel listener cleanup', () => {
