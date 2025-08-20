@@ -4,6 +4,7 @@ import ContactSearch from './components/ContactSearch'
 import CodeDisplay from './components/CodeDisplay'
 import TabSelector from './components/TabSelector'
 import WeatherClock from './components/WeatherClock'
+import DispatcherRadar from './components/DispatcherRadar'
 import { Toaster, toast } from 'react-hot-toast'
 import useRotatingCode from './hooks/useRotatingCode'
 
@@ -209,8 +210,10 @@ function App() {
             setSelectedGroups={setSelectedGroups}
             setAdhocEmails={setAdhocEmails}
           />
-        ) : (
+        ) : tab === 'contact' ? (
           <ContactSearch contactData={contactData} addAdhocEmail={addAdhocEmail} />
+        ) : (
+          <DispatcherRadar />
         )}
       </div>
     </div>
