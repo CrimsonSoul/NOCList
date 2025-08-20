@@ -4,6 +4,7 @@ import ContactSearch from './components/ContactSearch'
 import CodeDisplay from './components/CodeDisplay'
 import TabSelector from './components/TabSelector'
 import WeatherClock from './components/WeatherClock'
+import DispatcherRadar from './components/DispatcherRadar'
 import { Toaster, toast } from 'react-hot-toast'
 import useRotatingCode from './hooks/useRotatingCode'
 
@@ -189,6 +190,7 @@ function App() {
         </div>
         <TabSelector tab={tab} setTab={setTab} />
 
+        {tab !== 'radar' && (
           <div className="stack-on-small gap-1 mb-1">
             <button onClick={refreshData} className="btn">
               Refresh Data
@@ -197,6 +199,7 @@ function App() {
               Last Refreshed: {lastRefresh}
             </span>
           </div>
+        )}
       </header>
 
       {/* Scrollable content area */}
@@ -209,9 +212,12 @@ function App() {
             setSelectedGroups={setSelectedGroups}
             setAdhocEmails={setAdhocEmails}
           />
-        ) : (
+        ) : tab === 'contact' ? (
           <ContactSearch contactData={contactData} addAdhocEmail={addAdhocEmail} />
-        )}
+        ) : null}
+        <div style={{ display: tab === 'radar' ? 'block' : 'none', height: '100%' }}>
+          <DispatcherRadar />
+        </div>
       </div>
     </div>
   )

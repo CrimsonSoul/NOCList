@@ -1,16 +1,21 @@
 import { renderHook, act } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
-import crypto from 'crypto'
 import useRotatingCode from './useRotatingCode'
 
 describe('useRotatingCode', () => {
   it('rotates code and clears interval on unmount', () => {
     vi.useFakeTimers()
     const clearIntervalSpy = vi.spyOn(global, 'clearInterval')
-    const randomIntMock = vi
-      .spyOn(crypto, 'randomInt')
-      .mockReturnValueOnce(19000)
-      .mockReturnValue(28000)
+    const getRandomValuesMock = vi
+      .spyOn(globalThis.crypto, 'getRandomValues')
+      .mockImplementationOnce((arr) => {
+        arr[0] = 9000
+        return arr
+      })
+      .mockImplementation((arr) => {
+        arr[0] = 18000
+        return arr
+      })
 
     const { result, unmount } = renderHook(() => useRotatingCode(1000))
 
@@ -26,7 +31,7 @@ describe('useRotatingCode', () => {
     unmount()
     expect(clearIntervalSpy).toHaveBeenCalled()
 
-    randomIntMock.mockRestore()
+    getRandomValuesMock.mockRestore()
     clearIntervalSpy.mockRestore()
     vi.useRealTimers()
   })
