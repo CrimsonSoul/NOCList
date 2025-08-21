@@ -33,6 +33,7 @@ const DispatcherRadar = () => {
           src="https://cw-intra-web/CWDashboard/Home/Radar"
           title="Dispatcher Radar"
           style={iframeStyle}
+          className="minimal-scrollbar"
           onError={() => setError(true)}
         />
       )}
