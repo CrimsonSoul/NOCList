@@ -253,6 +253,27 @@ a[href^="mailto:"]:hover {
   opacity: 0.5;
 }
 
+/* Utility class for applying minimal scrollbars to embedded content */
+.minimal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.minimal-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.minimal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.minimal-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--accent);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
 /* Progress bar for code timer */
 .progress-container {
   position: relative;
